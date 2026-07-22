@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Interview Hub - Authentication</title>
+
+    <!-- Font Awesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            padding: 20px;
+        }
+
+        .container {
+            width: 900px;
+            max-width: 100%;
+            min-height: 550px;
+            display: flex;
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        /* LEFT SECTION */
+        .left-section {
+            width: 50%;
+            padding: 60px 40px;
+            color: white;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .left-section h1 {
+            font-size: 32px;
+            margin-bottom: 20px;
+        }
+
+        .left-section p {
+            font-size: 16px;
+            line-height: 1.6;
+            margin-bottom: 25px;
+        }
+
+        .left-section ul {
+            list-style: none;
+        }
+
+        .left-section li {
+            margin: 18px 0;
+            font-size: 16px;
+        }
+
+        .left-section li::before {
+            content: "✓";
+            margin-right: 10px;
+            font-weight: bold;
+        }
+
+        /* LOGIN BOX */
+        .login-box {
+            width: 50%;
+            padding: 45px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .login-box h2 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .login-box > p {
+            color: #777;
+            margin-bottom: 25px;
+        }
+
+        /* INPUT */
+        .input-box {
+            position: relative;
+            margin-bottom: 18px;
+        }
+
+        .input-box i {
+            position: absolute;
+            left: 15px;
+            top: 15px;
+            color: #667eea;
+        }
+
+        .input-box input {
+            width: 100%;
+            padding: 13px 15px 13px 45px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            outline: none;
+            font-size: 15px;
+        }
+
+        .input-box input:focus {
+            border-color: #667eea;
+        }
+
+        /* OPTIONS */
+        .options {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            margin-bottom: 20px;
+        }
+
+        .options a,
+        .signup a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        /* BUTTONS */
+        .login-btn {
+            width: 100%;
+            padding: 13px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .login-btn:hover {
+            opacity: 0.9;
+        }
+
+        /* DUMMY GOOGLE BUTTON */
+        .dummy-google-btn {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #dadce0;
+            border-radius: 8px;
+            background: #ffffff;
+            color: #3c4043;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+
+        .dummy-google-btn:hover {
+            background-color: #f8f9fa;
+            box-shadow: 0 1px 3px rgba(60,64,67,0.15);
+        }
+
+        .dummy-google-btn i {
+            font-size: 18px;
+            color: #4285F4;
+        }
+
+        /* SIGNUP */
+        .signup {
+            margin-top: 20px;
+            font-size: 14px;
+        }
+
+        /* DIVIDER */
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 20px 0;
+            color: #999;
+            font-size: 13px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: "";
+            flex: 1;
+            height: 1px;
+            background: #ddd;
+        }
+
+        .divider span {
+            padding: 0 10px;
+        }
+
+        /* RESPONSIVE */
+        @media screen and (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .left-section {
+                width: 100%;
+                padding: 35px;
+                text-align: center;
+            }
+
+            .left-section h1 {
+                font-size: 25px;
+            }
+
+            .left-section ul {
+                display: none;
+            }
+
+            .login-box {
+                width: 100%;
+                padding: 35px 25px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- LEFT SECTION -->
+        <div class="left-section">
+            <h1>🤖 AI Interview Hub</h1>
+            <p>Prepare for top product companies with AI-powered interview questions.</p>
+            <ul>
+                <li>2500+ Coding Questions</li>
+                <li>Company-Wise Preparation</li>
+                <li>AI Generated Solutions</li>
+                <li>Interactive Coding Playground</li>
+            </ul>
+        </div>
+
+        <!-- LOGIN BOX -->
+        <div class="login-box" id="loginBox">
+            <h2>Welcome Back 👋</h2>
+            <p>Login to continue your preparation</p>
+
+            <!-- EMAIL LOGIN -->
+            <form id="loginForm">
+                <div class="input-box">
+                    <i class="fa fa-envelope"></i>
+                    <input type="email" id="loginEmail" placeholder="Email Address" required>
+                </div>
+
+                <div class="input-box">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" id="loginPassword" placeholder="Password" required>
+                </div>
+
+                <div class="options">
+                    <label>
+                        <input type="checkbox"> Remember Me
+                    </label>
+                    <a href="#" id="showForgot">Forgot Password?</a>
+                </div>
+
+                <button type="submit" class="login-btn">Login</button>
+            </form>
+
+            <div class="divider">
+                <span>OR</span>
+            </div>
+
+            <!-- DUMMY GOOGLE LOGIN BUTTON -->
+            <button id="dummyGoogleBtn" class="dummy-google-btn">
+                <i class="fa-brands fa-google"></i> Continue with Google (Demo)
+            </button>
+
+            <p class="signup">
+                Don't have an account?
+                <a href="#" id="showSignup">Sign Up</a>
+            </p>
+        </div>
+
+        <!-- SIGN UP BOX -->
+        <div class="login-box" id="signupBox" style="display:none;">
+            <h2>Create Account 🚀</h2>
+            <p>Join us to start practicing</p>
+
+            <form id="signupForm">
+                <div class="input-box">
+                    <i class="fa fa-user"></i>
+                    <input type="text" id="regName" placeholder="Full Name" required>
+                </div>
+
+                <div class="input-box">
+                    <i class="fa fa-envelope"></i>
+                    <input type="email" id="regEmail" placeholder="Email Address" required>
+                </div>
+
+                <div class="input-box">
+                    <i class="fa fa-lock"></i>
+                    <input type="password" id="regPassword" placeholder="Password" required>
+                </div>
+
+                <button type="submit" class="login-btn">Register</button>
+            </form>
+
+            <p class="signup">
+                Already have an account?
+                <a href="#" id="showLogin">Login</a>
+            </p>
+        </div>
+
+        <!-- FORGOT PASSWORD BOX -->
+        <div class="login-box" id="forgotBox" style="display:none;">
+            <h2>Reset Password 🔑</h2>
+            <p>Enter your email to receive a password reset link</p>
+
+            <form id="forgotForm">
+                <div class="input-box">
+                    <i class="fa fa-envelope"></i>
+                    <input type="email" id="forgotEmail" placeholder="Registered Email" required>
+                </div>
+
+                <button type="submit" class="login-btn">Send Reset Link</button>
+            </form>
+
+            <p class="signup">
+                <a href="#" id="backToLoginFromForgot">Back to Login</a>
+            </p>
+        </div>
+    </div>
+
+    <script>
+        // Redirect immediately if already logged in
+        if (localStorage.getItem("currentUser")) {
+            window.location.href = "index.html";
+        }
+
+        /* VIEW SWITCHING */
+        const loginBox = document.getElementById("loginBox");
+        const signupBox = document.getElementById("signupBox");
+        const forgotBox = document.getElementById("forgotBox");
+
+        document.getElementById("showSignup").addEventListener("click", function (e) {
+            e.preventDefault();
+            loginBox.style.display = "none";
+            signupBox.style.display = "flex";
+            forgotBox.style.display = "none";
+        });
+
+        document.getElementById("showLogin").addEventListener("click", function (e) {
+            e.preventDefault();
+            signupBox.style.display = "none";
+            forgotBox.style.display = "none";
+            loginBox.style.display = "flex";
+        });
+
+        document.getElementById("showForgot").addEventListener("click", function (e) {
+            e.preventDefault();
+            loginBox.style.display = "none";
+            signupBox.style.display = "none";
+            forgotBox.style.display = "flex";
+        });
+
+        document.getElementById("backToLoginFromForgot").addEventListener("click", function (e) {
+            e.preventDefault();
+            forgotBox.style.display = "none";
+            signupBox.style.display = "none";
+            loginBox.style.display = "flex";
+        });
+
+        /* SIGN UP */
+        document.getElementById("signupForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById("regName").value.trim();
+            const email = document.getElementById("regEmail").value.trim();
+            const password = document.getElementById("regPassword").value;
+
+            const user = { name, email, password };
+            localStorage.setItem("registeredUser", JSON.stringify(user));
+
+            alert("Registration successful! Please login.");
+            document.getElementById("loginEmail").value = email;
+
+            signupBox.style.display = "none";
+            loginBox.style.display = "flex";
+        });
+
+        /* EMAIL LOGIN */
+        document.getElementById("loginForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById("loginEmail").value.trim();
+            const password = document.getElementById("loginPassword").value;
+            const savedUser = localStorage.getItem("registeredUser");
+
+            if (!savedUser) {
+                alert("No account found. Please Sign Up first.");
+                return;
+            }
+
+            const user = JSON.parse(savedUser);
+
+            if (email === user.email && password === user.password) {
+                const currentUser = {
+                    name: user.name,
+                    email: user.email,
+                    picture: "https://ui-avatars.com/api/?name=" + encodeURIComponent(user.name)
+                };
+
+                localStorage.setItem("currentUser", JSON.stringify(currentUser));
+                window.location.href = "index.html";
+            } else {
+                alert("Invalid email or password.");
+            }
+        });
+
+        /* FORGOT PASSWORD */
+        document.getElementById("forgotForm").addEventListener("submit", function (e) {
+            e.preventDefault();
+
+            const email = document.getElementById("forgotEmail").value.trim();
+            const savedUser = localStorage.getItem("registeredUser");
+
+            if (!savedUser) {
+                alert("No registered account found.");
+                return;
+            }
+
+            const user = JSON.parse(savedUser);
+
+            if (email === user.email) {
+                alert("Password reset link sent to " + email);
+            } else {
+                alert("Email address not found.");
+            }
+        });
+
+        /* MOCK / DUMMY GOOGLE LOGIN */
+        document.getElementById("dummyGoogleBtn").addEventListener("click", function() {
+            // Generate mock user data
+            const dummyUser = {
+                name: "Demo Google User",
+                email: "demouser@gmail.com",
+                picture: "https://ui-avatars.com/api/?name=Demo+User&background=0D8ABC&color=fff"
+            };
+
+            // Save session key required by script.js
+            localStorage.setItem("currentUser", JSON.stringify(dummyUser));
+
+            // Redirect smoothly to dashboard
+            window.location.href = "index.html";
+        });
+    </script>
+</body>
+
+</html>

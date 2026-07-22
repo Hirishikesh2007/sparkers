@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>AI Interview Hub - Google Login</title>
+
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+        }
+
+        .login-box {
+            width: 400px;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.25);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        p {
+            color: #777;
+            margin-bottom: 30px;
+        }
+
+        .google-login {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        #userInfo {
+            display: none;
+            margin-top: 25px;
+        }
+
+        #userInfo img {
+            width: 90px;
+            height: 90px;
+            border-radius: 50%;
+            margin-bottom: 15px;
+        }
+
+        #userName {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #userEmail {
+            color: #666;
+        }
+
+        .logout-btn {
+            margin-top: 20px;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 8px;
+            background: #667eea;
+            color: white;
+            cursor: pointer;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="login-box">
+
+        <h1>🤖 AI Interview Hub</h1>
+
+        <p>
+            Login to continue your interview preparation
+        </p>
+
+
+        <!-- GOOGLE LOGIN -->
+
+        <div class="google-login">
+
+            <div id="g_id_onload"
+                data-client_id="939997395795-2jk87j3l6q49l2h5sisjrrjnbm31b3l0.apps.googleusercontent.com"
+                data-callback="handleCredentialResponse"
+                data-auto_prompt="false">
+
+            </div>
+
+            <div class="g_id_signin"
+                data-type="standard"
+                data-size="large"
+                data-theme="outline"
+                data-text="continue_with"
+                data-shape="rectangular"
+                data-logo_alignment="left">
+
+            </div>
+
+        </div>
+
+
+        <!-- USER INFORMATION -->
+
+        <div id="userInfo">
+
+            <img id="userPicture" src="" alt="Profile Picture">
+
+            <h2 id="userName"></h2>
+
+            <p id="userEmail"></p>
+
+            <button
+                class="logout-btn"
+                onclick="logout()">
+
+                Logout
+
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        // GOOGLE LOGIN CALLBACK
+
+        function handleCredentialResponse(response) {
+
+            console.log(
+                "Google Credential:",
+                response.credential
+            );
+
+
+            // Decode Google JWT
+            const data =
+                parseJwt(response.credential);
+
+
+            // Show user information
+
+            document.getElementById("userInfo")
+                .style.display = "block";
+
+
+            document.getElementById("userName")
+                .innerText =
+                "Welcome, " + data.name;
+
+
+            document.getElementById("userEmail")
+                .innerText =
+                data.email;
+
+
+            document.getElementById("userPicture")
+                .src =
+                data.picture;
+
+
+            // Hide Google Login Button
+
+            document.querySelector(".google-login")
+                .style.display = "none";
+
+
+            // Save user information
+
+            localStorage.setItem(
+                "googleUser",
+                JSON.stringify(data)
+            );
+
+        }
+
+
+        // DECODE JWT
+
+        function parseJwt(token) {
+
+            const base64Url =
+                token.split(".")[1];
+
+            const base64 =
+                base64Url
+                .replace(/-/g, "+")
+                .replace(/_/g, "/");
+
+            const jsonPayload =
+                decodeURIComponent(
+                    window.atob(base64)
+                    .split("")
+                    .map(function (c) {
+
+                        return "%" +
+                            ("00" +
+                            c.charCodeAt(0)
+                            .toString(16))
+                            .slice(-2);
+
+                    })
+                    .join("")
+                );
+
+            return JSON.parse(
+                jsonPayload
+            );
+
+        }
+
+
+        // LOGOUT
+
+        function logout() {
+
+            localStorage.removeItem(
+                "googleUser"
+            );
+
+            document.getElementById("userInfo")
+                .style.display = "none";
+
+            document.querySelector(".google-login")
+                .style.display = "flex";
+
+        }
+
+
+        // CHECK EXISTING LOGIN
+
+        window.onload = function () {
+
+            const savedUser =
+                localStorage.getItem(
+                    "googleUser"
+                );
+
+
+            if (savedUser) {
+
+                const data =
+                    JSON.parse(savedUser);
+
+
+                document.getElementById("userInfo")
+                    .style.display = "block";
+
+
+                document.querySelector(".google-login")
+                    .style.display = "none";
+
+
+                document.getElementById("userName")
+                    .innerText =
+                    "Welcome, " + data.name;
+
+
+                document.getElementById("userEmail")
+                    .innerText =
+                    data.email;
+
+
+                document.getElementById("userPicture")
+                    .src =
+                    data.picture;
+
+            }
+
+        };
+
+    </script>
+
+</body>
+
+</html>

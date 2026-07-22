@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Question Workspace</title>
+    <link rel="stylesheet" href="details.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+    <div class="container">
+        <header>
+            <button onclick="window.location.href='index.html'">
+                <i class="fa-solid fa-arrow-left"></i> Back to Dashboard
+            </button>
+            <h1>AI Interview Hub Workspace</h1>
+        </header>
+
+        <div class="question-box">
+            <div class="title">
+                <h2 id="qTitle">Two Sum</h2>
+                <div class="badges">
+                    <span class="company" id="qCompany">Amazon</span>
+                    <span class="easy" id="qDifficulty">Easy</span>
+                    <span class="category" id="qCategory">Two Pointer</span>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Problem Statement</h3>
+                <p id="qStatement">Given an array of integers nums and an integer target, return indices of the two
+                    numbers such that they add up to target.</p>
+            </div>
+
+            <div class="section">
+                <h3>Test Cases</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Input</th>
+                            <th>Expected Output</th>
+                        </tr>
+                    </thead>
+                    <tbody id="testCasesTable">
+                        <tr>
+                            <td>[2,7,11,15], 9</td>
+                            <td>[0,1]</td>
+                        </tr>
+                        <tr>
+                            <td>[3,2,4], 6</td>
+                            <td>[1,2]</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <!-- CODING WORKSPACE -->
+            <div class="section">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h3>Coding Workspace</h3>
+                    <div>
+                        <label for="langSelect" style="color:#94a3b8; font-weight: 500;">Language: </label>
+                        <select id="langSelect"
+                            style="background:#0f172a; color:#38bdf8; padding:8px 14px; border:1px solid #3b82f6; border-radius:8px; outline:none; font-weight:600; cursor:pointer;">
+                            <option value="python">Python</option>
+                            <option value="javascript">JavaScript</option>
+                            <option value="cpp">C++</option>
+                            <option value="java">Java</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Styled Textarea Editor -->
+                <textarea id="codeEditor" rows="13" spellcheck="false"
+                    style="width:100%; background:#0f172a; color:#22c55e; padding:15px; border-radius:10px; font-family:'Courier New', monospace; font-size:15px; border:1px solid #334155; line-height:1.5;"
+                    placeholder="// Select language and start coding..."></textarea>
+
+                <!-- Action Controls -->
+                <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap; align-items: center;">
+                    <button id="runBtn"
+                        style="padding: 12px 24px; background: #16a34a; border:none; color:white; border-radius:8px; cursor:pointer; font-weight:600;">
+                        <i class="fa-solid fa-play"></i> Run Code
+                    </button>
+                    <button id="submitBtn"
+                        style="padding: 12px 24px; background: #2563eb; border:none; color:white; border-radius:8px; cursor:pointer; font-weight:600;">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Solution
+                    </button>
+                    <button id="getHintBtn"
+                        style="padding: 12px 24px; background: #8b5cf6; border:none; color:white; border-radius:8px; cursor:pointer; font-weight:600;">
+                        <i class="fa-solid fa-lightbulb"></i> Get Hint (<span id="hintsLeft">3</span> left)
+                    </button>
+                    <button id="showSolutionBtn"
+                        style="padding: 12px 24px; background: #334155; border:none; color:#94a3b8; border-radius:8px; cursor:not-allowed; font-weight:600;"
+                        disabled>
+                        <i class="fa-solid fa-lock"></i> Show Solution (Use 3 Hints First)
+                    </button>
+                </div>
+
+                <!-- Hint Drawer -->
+                <div id="hintBox"
+                    style="margin-top: 15px; background: #2e1065; border-left: 4px solid #8b5cf6; padding: 15px; border-radius: 8px; display: none;">
+                    <h4 style="color:#c084fc; margin-bottom: 5px;">💡 Hints Unlocked:</h4>
+                    <ul id="hintList" style="margin-left:20px; color:#e9d5ff; line-height:1.6;"></ul>
+                </div>
+            </div>
+
+            <!-- HIDDEN SOLUTION SECTION -->
+            <div class="section" id="solutionSection" style="display:none;">
+                <h3>Sample Solution (<span id="selectedLangDisplay">PYTHON</span>)</h3>
+                <pre
+                    style="background:#0f172a; padding:18px; border-radius:10px; border:1px solid #334155;"><code id="solutionCodeDisplay" style="color:#38bdf8; font-family:monospace;"></code></pre>
+            </div>
+
+            <!-- OUTPUT TERMINAL -->
+            <div class="section" id="terminalSection" style="display:none;">
+                <h3>Console Output</h3>
+                <pre id="consoleOutput" style="background:#000; color:#38bdf8; padding:15px; border-radius:8px;"></pre>
+            </div>
+
+            <button class="download" id="downloadBtn" style="margin-top:30px;">
+                <i class="fa-solid fa-download"></i> Download Question JSON
+            </button>
+        </div>
+    </div>
+
+    <script src="details.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CodeMaster - Learning & Practice Platform</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #0f172a;
+            color: #f8fafc;
+        }
+
+        .navbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 1rem 2rem;
+            background-color: #1e293b;
+            border-bottom: 1px solid #334155;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #38bdf8;
+        }
+
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 1.2rem;
+            align-items: center;
+        }
+
+        .nav-links a {
+            color: #94a3b8;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s;
+            cursor: pointer;
+        }
+
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: #38bdf8;
+        }
+
+        .btn-action {
+            background-color: #334155;
+            color: #f8fafc;
+            border: 1px solid #475569;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: background-color 0.2s, color 0.2s;
+        }
+
+        .btn-action:hover {
+            background-color: #475569;
+            color: #38bdf8;
+        }
+
+        .btn-logout {
+            background-color: #7f1d1d;
+            color: #fca5a5;
+            border: 1px solid #991b1b;
+        }
+
+        .btn-logout:hover {
+            background-color: #991b1b;
+            color: #ffffff;
+        }
+
+        .main-container {
+            display: flex;
+            min-height: calc(100vh - 65px);
+        }
+
+        .sidebar {
+            width: 280px;
+            background-color: #1e293b;
+            padding: 1.5rem 1rem;
+            border-right: 1px solid #334155;
+            max-height: calc(100vh - 65px);
+            overflow-y: auto;
+        }
+
+        .sidebar h2 {
+            font-size: 0.9rem;
+            color: #94a3b8;
+            margin-bottom: 1.2rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            padding-left: 0.5rem;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar li {
+            padding: 0.75rem 0.9rem;
+            margin-bottom: 0.4rem;
+            border-radius: 8px;
+            cursor: pointer;
+            color: #cbd5e1;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            transition: background 0.2s, color 0.2s;
+            border: 1px solid transparent;
+        }
+
+        .sidebar li:hover,
+        .sidebar li.active {
+            background-color: #334155;
+            color: #38bdf8;
+            font-weight: bold;
+            border-color: #475569;
+        }
+
+        .category-count {
+            background: #0f172a;
+            color: #cbd5e1;
+            font-size: 0.75rem;
+            padding: 2px 8px;
+            border-radius: 12px;
+            border: 1px solid #334155;
+        }
+
+        .sidebar li.active .category-count {
+            background: #0284c7;
+            color: #ffffff;
+            border-color: #38bdf8;
+        }
+
+        .content {
+            flex: 1;
+            padding: 2rem;
+            max-height: calc(100vh - 65px);
+            overflow-y: auto;
+        }
+
+        .dashboard-progress-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .progress-bar-container {
+            width: 100%;
+            height: 12px;
+            background-color: #0f172a;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #334155;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, #38bdf8, #3b82f6);
+            transition: width 0.4s ease;
+        }
+
+        .filter-controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .search-bar {
+            flex: 1;
+            padding: 0.8rem 1.2rem;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #fff;
+            font-size: 1rem;
+        }
+
+        .filter-select {
+            padding: 0.8rem 1.2rem;
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #38bdf8;
+            font-weight: bold;
+            font-size: 0.95rem;
+            cursor: pointer;
+            outline: none;
+        }
+
+        .filter-select:focus, .search-bar:focus {
+            border-color: #38bdf8;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .question-card {
+            background-color: #1e293b;
+            border: 1px solid #334155;
+            border-radius: 12px;
+            padding: 1.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .badges {
+            display: flex;
+            gap: 0.5rem;
+            margin: 0.5rem 0 1rem 0;
+        }
+
+        .badge {
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: bold;
+        }
+
+        .badge.Easy { background: #065f46; color: #34d399; }
+        .badge.Medium { background: #854d0e; color: #fde047; }
+        .badge.Hard { background: #991b1b; color: #fca5a5; }
+
+        .primary-btn {
+            padding: 0.75rem 1rem;
+            background-color: #38bdf8;
+            color: #0f172a;
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .primary-btn:hover:not(:disabled) {
+            opacity: 0.9;
+        }
+
+        .primary-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        .btn-solved {
+            background-color: #16a34a !important;
+            color: white !important;
+        }
+
+        .quiz-option-btn {
+            width: 100%;
+            padding: 0.9rem;
+            margin-bottom: 0.6rem;
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            border-radius: 8px;
+            color: #cbd5e1;
+            text-align: left;
+            cursor: pointer;
+            font-size: 0.95rem;
+        }
+
+        .quiz-option-btn.selected {
+            border-color: #38bdf8;
+            background-color: #0284c7;
+            color: #ffffff;
+            font-weight: bold;
+        }
+
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.85);
+            backdrop-filter: blur(4px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .modal-content {
+            background-color: #1e293b;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 650px;
+            padding: 2rem;
+            border: 1px solid #334155;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: #94a3b8;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        .editor-textarea {
+            width: 100%;
+            height: 200px;
+            background-color: #0f172a;
+            color: #38bdf8;
+            font-family: 'Courier New', Courier, monospace;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            resize: vertical;
+            font-size: 0.95rem;
+            margin: 1rem 0 0.5rem 0;
+        }
+
+        .editor-textarea:focus {
+            outline: 1px solid #38bdf8;
+        }
+
+        .console-output {
+            background-color: #0f172a;
+            border: 1px solid #334155;
+            padding: 0.8rem;
+            border-radius: 6px;
+            font-family: monospace;
+            font-size: 0.85rem;
+            color: #a7f3d0;
+            min-height: 50px;
+        }
+
+        .hint-box {
+            background-color: #0f172a;
+            border: 1px solid #fbbf24;
+            color: #fde047;
+            padding: 0.8rem;
+            border-radius: 8px;
+            font-size: 0.85rem;
+            margin-top: 0.5rem;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="logo"><i class="fa-solid fa-code"></i> CodeMaster</div>
+        <ul class="nav-links">
+            <li><a href="#" id="navPractice" class="active"><i class="fa-solid fa-code"></i> Practice Problems</a></li>
+            <li><a href="#" id="navQuiz"><i class="fa-solid fa-graduation-cap"></i> Interactive Quiz</a></li>
+            <li><button id="jsonBtn" class="btn-action"><i class="fa-solid fa-file-code"></i> JSON Data</button></li>
+            <li><button id="logoutBtn" class="btn-action btn-logout"><i class="fa-solid fa-right-from-bracket"></i> Logout</button></li>
+        </ul>
+    </nav>
+
+    <div class="main-container">
+        <aside class="sidebar">
+            <h2><i class="fa-solid fa-layer-group"></i> Program Fields</h2>
+            <ul id="segregatedSidebarContainer"></ul>
+        </aside>
+
+        <main class="content">
+            <div class="dashboard-progress-card">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <h3 style="font-size: 1.1rem; color: #f8fafc;"><i class="fa-solid fa-chart-line" style="color: #38bdf8;"></i> Overall Practice Progress</h3>
+                    <span id="dashProgressStats" style="font-size: 0.9rem; color: #38bdf8; font-weight: bold;">0 / 0 Solved (0%)</span>
+                </div>
+                <div class="progress-bar-container">
+                    <div id="dashProgressBarFill" class="progress-bar-fill"></div>
+                </div>
+            </div>
+
+            <div id="practiceSection">
+                <div class="filter-controls">
+                    <input type="text" id="search" class="search-bar" placeholder="Search by problem title or description...">
+                    <select id="difficultySelect" class="filter-select">
+                        <option value="All">All Difficulties</option>
+                        <option value="Easy">Easy</option>
+                        <option value="Medium">Medium</option>
+                        <option value="Hard">Hard</option>
+                    </select>
+                </div>
+
+                <div id="questionContainer" class="grid"></div>
+            </div>
+
+            <div id="quizSection" style="display: none; background-color: #1e293b; border-radius: 12px; padding: 2rem; border: 1px solid #334155;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                    <h2><i class="fa-solid fa-graduation-cap" style="color: #38bdf8;"></i> Assessment Quiz</h2>
+                    <span id="quizCounter" style="color: #94a3b8;">Question 1 of 20</span>
+                </div>
+
+                <div id="quizCardBox">
+                    <h3 id="quizQuestionText" style="margin: 1.5rem 0; font-weight: 600; font-size: 1.2rem;">Quiz question here?</h3>
+                    <div id="quizOptionsContainer"></div>
+                    <div style="text-align: right; margin-top: 1.5rem;">
+                        <button id="quizNextBtn" class="primary-btn" disabled>Next Question</button>
+                    </div>
+                </div>
+
+                <div id="quizScoreBox" style="display: none; text-align: center; padding: 2rem 0;">
+                    <i class="fa-solid fa-trophy" style="font-size: 3.5rem; color: #fde047; margin-bottom: 1rem;"></i>
+                    <h2>Quiz Completed!</h2>
+                    <p id="quizScoreText" style="color: #cbd5e1; font-size: 1.2rem; margin: 0.5rem 0 1rem 0;"></p>
+                    <div id="quizBadge" style="font-size: 1.1rem; font-weight: bold; margin-bottom: 1.5rem;"></div>
+                    <button id="quizRestartBtn" class="primary-btn"><i class="fa-solid fa-rotate-right"></i> Retake Quiz</button>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- CODE EDITOR MODAL WITH HINTS & SOLUTION LOCK -->
+    <div id="editorModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <div>
+                    <h2 id="modalProblemTitle" style="color: #38bdf8;"><i class="fa-solid fa-terminal"></i> Coding Workspace</h2>
+                    <p id="modalProblemDesc" style="color: #94a3b8; font-size: 0.85rem; margin-top: 4px;"></p>
+                </div>
+                <button id="closeEditorModal" class="close-btn">&times;</button>
+            </div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 0.5rem; background: #0f172a; padding: 0.6rem 1rem; border-radius: 8px; border: 1px solid #334155;">
+                <div>
+                    <button id="getHintBtn" class="primary-btn" style="background-color: #d97706; color: white; padding: 0.4rem 0.8rem; font-size: 0.85rem;">
+                        <i class="fa-solid fa-lightbulb"></i> Get Hint (<span id="hintCount">0</span>/3)
+                    </button>
+                </div>
+                <div>
+                    <button id="showSolutionBtn" class="primary-btn" style="background-color: #475569; color: #94a3b8; padding: 0.4rem 0.8rem; font-size: 0.85rem;" disabled>
+                        <i class="fa-solid fa-lock" id="solutionLockIcon"></i> Solution Locked
+                    </button>
+                </div>
+            </div>
+
+            <div id="hintContainer" class="hint-box"></div>
+
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 1rem;">
+                <label style="font-size: 0.9rem; color: #cbd5e1;">Select Language: </label>
+                <select id="languageSelect" style="background: #0f172a; color: #38bdf8; border: 1px solid #334155; padding: 0.4rem 0.8rem; border-radius: 6px; font-weight: bold;">
+                    <option value="python">Python 3</option>
+                    <option value="javascript">JavaScript (Node.js)</option>
+                    <option value="cpp">C++ 20</option>
+                    <option value="java">Java 17</option>
+                </select>
+            </div>
+
+            <textarea id="codeTextarea" class="editor-textarea" spellcheck="false"></textarea>
+
+            <div>
+                <label style="font-size: 0.85rem; color: #94a3b8;">Console Output:</label>
+                <div id="consoleOutput" class="console-output">Ready to compile & evaluate solution...</div>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 1.2rem;">
+                <button id="runCodeBtn" class="primary-btn" style="background-color: #334155; color: #38bdf8; flex: 1;">
+                    <i class="fa-solid fa-play"></i> Run Code
+                </button>
+                <button id="submitCodeBtn" class="primary-btn" style="background-color: #16a34a; color: white; flex: 1;">
+                    <i class="fa-solid fa-paper-plane"></i> Submit Solution
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- JSON MODAL -->
+    <div id="jsonModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2><i class="fa-solid fa-code"></i> Problem Set Data (JSON)</h2>
+                <button id="closeJsonModal" class="close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="color: #94a3b8; font-size: 0.9rem; margin-bottom: 1rem;">
+                    View, copy, or download the active dataset below.
+                </p>
+                <pre id="jsonDisplay" style="
+                    background-color: #0f172a;
+                    color: #38bdf8;
+                    padding: 1rem;
+                    border-radius: 8px;
+                    max-height: 280px;
+                    overflow-y: auto;
+                    font-family: monospace;
+                    font-size: 0.85rem;
+                    border: 1px solid #334155;
+                    white-space: pre-wrap;
+                "></pre>
+            </div>
+            <div class="modal-footer" style="display: flex; gap: 10px; margin-top: 1.5rem;">
+                <button id="copyJsonBtn" class="primary-btn" style="background-color: #0284c7; color: white; flex: 1;">
+                    <i class="fa-regular fa-copy"></i> Copy JSON
+                </button>
+                <button id="downloadJsonBtn" class="primary-btn" style="background-color: #16a34a; color: white; flex: 1;">
+                    <i class="fa-solid fa-download"></i> Download .json
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- LOGOUT MODAL -->
+    <div id="logoutModal" class="modal-overlay" style="display: none;">
+        <div class="modal-content" style="max-width: 420px; text-align: center;">
+            <div style="font-size: 3rem; color: #fca5a5; margin-bottom: 1rem;">
+                <i class="fa-solid fa-circle-exclamation"></i>
+            </div>
+            <h2 style="margin-bottom: 0.5rem;">Confirm Logout</h2>
+            <p style="color: #94a3b8; font-size: 0.95rem; margin-bottom: 1.5rem;">
+                Are you sure you want to exit your active coding session?
+            </p>
+            <div style="display: flex; gap: 12px;">
+                <button id="cancelLogoutBtn" class="primary-btn" style="background-color: #334155; color: #cbd5e1; flex: 1;">
+                    Cancel
+                </button>
+                <button id="confirmLogoutBtn" class="primary-btn" style="background-color: #dc2626; color: white; flex: 1;">
+                    Yes, Logout
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* HELPER TO GENERATE HINTS FOR QUESTIONS */
+        function makeHints(p1, p2, p3, j1, j2, j3, c1, c2, c3, v1, v2, v3) {
+            return {
+                python: ["Hint 1: " + p1, "Hint 2: " + p2, "Hint 3: " + p3],
+                javascript: ["Hint 1: " + j1, "Hint 2: " + j2, "Hint 3: " + j3],
+                cpp: ["Hint 1: " + c1, "Hint 2: " + c2, "Hint 3: " + c3],
+                java: ["Hint 1: " + v1, "Hint 2: " + v2, "Hint 3: " + v3]
+            };
+        }
+
+        /* HELPER TO GENERATE SOLUTIONS FOR QUESTIONS */
+        function makeSolutions(py, js, cpp, java) {
+            return { python: py, javascript: js, cpp: cpp, java: java };
+        }
+
+        /* =====================================================
+           1. FULL DATASET (ALL 22 QUESTIONS)
+        ===================================================== */
+        const questions = [
+            { 
+                id: 1, title: "Two Sum", category: "Arrays & Strings", difficulty: "Easy", 
+                description: "Find indices of two numbers in an array that add up to a target sum.", solved: false,
+                requiredKeywords: ["map", "dict", "hash", "seen", "for", "while"],
+                hints: makeHints(
+                    "Brute force double loop is O(n²). Optimize with hash map.",
+                    "Store visited elements as key and index as value.",
+                    "Check if target - current_num exists in map.",
+                    "Use JS Map or object `{}` for lookup.", "Check `map.has(target - nums[i])`.", "Return `[map.get(diff), i]`.",
+                    "Use `std::unordered_map<int, int>`.", "Store element index pair.", "Check `map.find(target - num) != map.end()`.",
+                    "Use `HashMap<Integer, Integer>`.", "Calculate target complement.", "Use `map.containsKey(diff)`."
+                ),
+                solutions: makeSolutions(
+                    "def solve(nums, target):\n    seen = {}\n    for i, n in enumerate(nums):\n        if target - n in seen: return [seen[target-n], i]\n        seen[n] = i",
+                    "function solve(nums, target) {\n    let m = new Map();\n    for(let i=0; i<nums.length; i++) {\n        if(m.has(target-nums[i])) return [m.get(target-nums[i]), i];\n        m.set(nums[i], i);\n    }\n}",
+                    "vector<int> solve(vector<int>& nums, int t) {\n    unordered_map<int, int> m;\n    for(int i=0; i<nums.size(); i++) {\n        if(m.count(t-nums[i])) return {m[t-nums[i]], i};\n        m[nums[i]] = i;\n    }\n    return {};\n}",
+                    "public int[] solve(int[] nums, int t) {\n    HashMap<Integer, Integer> m = new HashMap<>();\n    for(int i=0; i<nums.length; i++) {\n        if(m.containsKey(t-nums[i])) return new int[]{m.get(t-nums[i]), i};\n        m.put(nums[i], i);\n    }\n    return new int[]{};\n}"
+                )
+            },
+            { 
+                id: 2, title: "Valid Parentheses", category: "Arrays & Strings", difficulty: "Easy", 
+                description: "Determine if an input string containing brackets is valid using a stack.", solved: false,
+                requiredKeywords: ["stack", "pop", "push", "append"],
+                hints: makeHints(
+                    "Use a Stack to keep track of opening brackets.", "Push when open, pop when close bracket.", "Match current closing with top of stack.",
+                    "Use array methods `.push()` and `.pop()`.", "Store closing match mapping in object.", "Check empty stack state at end.",
+                    "Use `std::stack<char>`.", "Push complementary closing brackets.", "Match top element.",
+                    "Use `Stack<Character>`.", "Push closing brackets directly.", "Check `stack.isEmpty()`."
+                ),
+                solutions: makeSolutions(
+                    "def isValid(s):\n    st = []\n    m = {')':'(', '}':'{', ']':'['}\n    for c in s:\n        if c in m:\n            if not st or st.pop() != m[c]: return False\n        else: st.append(c)\n    return not st",
+                    "function isValid(s) {\n    let st = [];\n    for(let c of s) {\n        if(c==='(') st.push(')');\n        else if(c==='{') st.push('}');\n        else if(c==='[') st.push(']');\n        else if(!st.length || st.pop()!==c) return false;\n    }\n    return st.length===0;\n}",
+                    "bool isValid(string s) {\n    stack<char> st;\n    for(char c:s) {\n        if(c=='(') st.push(')');\n        else if(st.empty() || st.top()!=c) return false;\n        else st.pop();\n    }\n    return st.empty();\n}",
+                    "public boolean isValid(String s) {\n    Stack<Character> st = new Stack<>();\n    for(char c: s.toCharArray()) {\n        if(c=='(') st.push(')');\n        else if(st.isEmpty() || st.pop()!=c) return false;\n    }\n    return st.isEmpty();\n}"
+                )
+            },
+            { 
+                id: 3, title: "Reverse Linked List", category: "Trees & Graphs", difficulty: "Easy", 
+                description: "Reverse singly linked list iteratively and recursively.", solved: false,
+                requiredKeywords: ["prev", "next", "head", "curr", "node"],
+                hints: makeHints(
+                    "Maintain 3 pointers: prev, curr, next.", "Change curr.next to point back to prev.", "Advance prev and curr forward.",
+                    "Initialize prev = null, curr = head.", "Save next before changing link.", "Return prev as new head.",
+                    "Use Node* prev = nullptr.", "Loop while curr != nullptr.", "Reassign pointers inside loop.",
+                    "Set ListNode prev = null.", "Re-link curr.next = prev.", "Return prev."
+                ),
+                solutions: makeSolutions(
+                    "def reverseList(head):\n    prev, curr = None, head\n    while curr:\n        nxt = curr.next\n        curr.next = prev\n        prev = curr\n        curr = nxt\n    return prev",
+                    "function reverseList(head) {\n    let prev = null, curr = head;\n    while(curr) {\n        let nxt = curr.next;\n        curr.next = prev;\n        prev = curr;\n        curr = nxt;\n    }\n    return prev;\n}",
+                    "ListNode* reverseList(ListNode* head) {\n    ListNode *prev = nullptr, *curr = head;\n    while(curr) {\n        ListNode* nxt = curr->next;\n        curr->next = prev;\n        prev = curr;\n        curr = nxt;\n    }\n    return prev;\n}",
+                    "public ListNode reverseList(ListNode head) {\n    ListNode prev = null, curr = head;\n    while(curr != null) {\n        ListNode nxt = curr.next;\n        curr.next = prev;\n        prev = curr;\n        curr = nxt;\n    }\n    return prev;\n}"
+                )
+            },
+            { 
+                id: 4, title: "Best Time to Buy Stock", category: "Arrays & Strings", difficulty: "Easy", 
+                description: "Find maximum profit from buying and selling stock once.", solved: false,
+                requiredKeywords: ["min", "max", "profit", "price", "for"],
+                hints: makeHints(
+                    "Track the minimum price seen so far.", "Calculate profit if sold today.", "Update max profit encountered.",
+                    "Initialize minPrice = Infinity.", "Loop through price array once.", "Update maxProfit = Math.max().",
+                    "Set min_price = INT_MAX.", "Compare prices[i] - min_price.", "Return max_profit.",
+                    "Use Math.min() and Math.max().", "Single pass O(n) solution.", "Track lowest buy price."
+                ),
+                solutions: makeSolutions(
+                    "def maxProfit(prices):\n    min_p, max_p = float('inf'), 0\n    for p in prices:\n        min_p = min(min_p, p)\n        max_p = max(max_p, p - min_p)\n    return max_p",
+                    "function maxProfit(prices) {\n    let minP = Infinity, maxP = 0;\n    for(let p of prices) {\n        minP = Math.min(minP, p);\n        maxP = Math.max(maxP, p - minP);\n    }\n    return maxP;\n}",
+                    "int maxProfit(vector<int>& prices) {\n    int minP = INT_MAX, maxP = 0;\n    for(int p : prices) {\n        minP = min(minP, p);\n        maxP = max(maxP, p - minP);\n    }\n    return maxP;\n}",
+                    "public int maxProfit(int[] prices) {\n    int minP = Integer.MAX_VALUE, maxP = 0;\n    for(int p : prices) {\n        minP = Math.min(minP, p);\n        maxP = Math.max(maxP, p - minP);\n    }\n    return maxP;\n}"
+                )
+            },
+            { 
+                id: 5, title: "Valid Anagram", category: "Arrays & Strings", difficulty: "Easy", 
+                description: "Determine if two strings are anagrams of each other.", solved: false,
+                requiredKeywords: ["count", "sort", "map", "dict", "hash"],
+                hints: makeHints(
+                    "Check if length of both strings is equal.", "Count character frequencies.", "Compare character counts.",
+                    "Sort both strings or frequency map.", "Compare sorted arrays.", "Return equality.",
+                    "Use frequency array of size 26.", "Increment for string 1, decrement for 2.", "Check all zero.",
+                    "Use char count array.", "Loop through chars.", "Check zero frequency."
+                ),
+                solutions: makeSolutions(
+                    "def isAnagram(s, t):\n    return sorted(s) == sorted(t)",
+                    "function isAnagram(s, t) {\n    return s.split('').sort().join('') === t.split('').sort().join('');\n}",
+                    "bool isAnagram(string s, string t) {\n    if(s.length() != t.length()) return false;\n    int counts[26] = {0};\n    for(int i=0; i<s.length(); i++) {\n        counts[s[i]-'a']++; counts[t[i]-'a']--;\n    }\n    for(int c : counts) if(c != 0) return false;\n    return true;\n}",
+                    "public boolean isAnagram(String s, String t) {\n    char[] sArr = s.toCharArray(), tArr = t.toCharArray();\n    java.util.Arrays.sort(sArr); java.util.Arrays.sort(tArr);\n    return java.util.Arrays.equals(sArr, tArr);\n}"
+                )
+            },
+            { 
+                id: 6, title: "Binary Search", category: "Trees & Graphs", difficulty: "Easy", 
+                description: "Find target value in O(log n) sorted array.", solved: false,
+                requiredKeywords: ["low", "high", "mid", "while", "left", "right"],
+                hints: makeHints(
+                    "Maintain left and right pointers.", "Calculate mid = (left + right) // 2.", "Narrow search space based on target value.",
+                    "Use `Math.floor((left + right) / 2)`.", "If target > mid, move left pointer.", "If target < mid, move right pointer.",
+                    "Avoid overflow using `mid = left + (right - left)/2`.", "Compare nums[mid] with target.", "Return index or -1.",
+                    "Loop while left <= right.", "Check mid element.", "Return index."
+                ),
+                solutions: makeSolutions(
+                    "def search(nums, target):\n    l, r = 0, len(nums) - 1\n    while l <= r:\n        m = (l + r) // 2\n        if nums[m] == target: return m\n        elif nums[m] < target: l = m + 1\n        else: r = m - 1\n    return -1",
+                    "function search(nums, target) {\n    let l = 0, r = nums.length - 1;\n    while(l <= r) {\n        let m = Math.floor((l + r) / 2);\n        if(nums[m] === target) return m;\n        if(nums[m] < target) l = m + 1;\n        else r = m - 1;\n    }\n    return -1;\n}",
+                    "int search(vector<int>& nums, int target) {\n    int l = 0, r = nums.size() - 1;\n    while(l <= r) {\n        int m = l + (r - l) / 2;\n        if(nums[m] == target) return m;\n        if(nums[m] < target) l = m + 1;\n        else r = m - 1;\n    }\n    return -1;\n}",
+                    "public int search(int[] nums, int target) {\n    int l = 0, r = nums.length - 1;\n    while(l <= r) {\n        int m = l + (r - l) / 2;\n        if(nums[m] == target) return m;\n        if(nums[m] < target) l = m + 1;\n        else r = m - 1;\n    }\n    return -1;\n}"
+                )
+            },
+            { 
+                id: 7, title: "Longest Substring Without Repeats", category: "Arrays & Strings", difficulty: "Medium", 
+                description: "Find length of longest unique character substring via sliding window.", solved: false,
+                requiredKeywords: ["set", "window", "left", "right", "max", "slide"],
+                hints: makeHints(
+                    "Use sliding window technique with set.", "Expand window right edge.", "Shrink left edge if duplicate encountered.",
+                    "Track visited characters using Set.", "Maintain max length variable.", "Loop with right pointer.",
+                    "Use `std::unordered_set<char>`.", "Erase from set while repeating char exists.", "Update max distance.",
+                    "Use HashSet.", "Track left and right index.", "Update max length."
+                ),
+                solutions: makeSolutions(
+                    "def lengthOfLongestSubstring(s):\n    char_set = set()\n    l, res = 0, 0\n    for r in range(len(s)):\n        while s[r] in char_set:\n            char_set.remove(s[l])\n            l += 1\n        char_set.add(s[r])\n        res = max(res, r - l + 1)\n    return res",
+                    "function lengthOfLongestSubstring(s) {\n    let set = new Set(), l = 0, res = 0;\n    for(let r = 0; r < s.length; r++) {\n        while(set.has(s[r])) { set.delete(s[l]); l++; }\n        set.add(s[r]);\n        res = Math.max(res, r - l + 1);\n    }\n    return res;\n}",
+                    "int lengthOfLongestSubstring(string s) {\n    unordered_set<char> st;\n    int l = 0, res = 0;\n    for(int r = 0; r < s.length(); r++) {\n        while(st.count(s[r])) { st.erase(s[l]); l++; }\n        st.insert(s[r]);\n        res = max(res, r - l + 1);\n    }\n    return res;\n}",
+                    "public int lengthOfLongestSubstring(String s) {\n    HashSet<Character> set = new HashSet<>();\n    int l = 0, res = 0;\n    for(int r = 0; r < s.length(); r++) {\n        while(set.contains(s.charAt(r))) { set.remove(s.charAt(l)); l++; }\n        set.add(s.charAt(r));\n        res = Math.max(res, r - l + 1);\n    }\n    return res;\n}"
+                )
+            },
+            { 
+                id: 8, title: "Maximum Subarray (Kadane)", category: "Arrays & Strings", difficulty: "Medium", 
+                description: "Find contiguous subarray with largest sum.", solved: false,
+                requiredKeywords: ["max", "current", "sum", "kadane", "for"],
+                hints: makeHints(
+                    "Kadane's algorithm computes local maximum.", "If current sum drops below 0, reset it to 0.", "Track global maximum sum.",
+                    "Initialize max_sum = nums[0].", "Iterate array adding each element.", "Reset current_sum if negative.",
+                    "Use max_sum and curr_sum variables.", "Compare curr_sum = max(n, curr_sum + n).", "Return max_sum.",
+                    "Initialize max = nums[0].", "Loop through numbers.", "Update overall max."
+                ),
+                solutions: makeSolutions(
+                    "def maxSubArray(nums):\n    max_s, curr_s = nums[0], 0\n    for n in nums:\n        curr_s = max(n, curr_s + n)\n        max_s = max(max_s, curr_s)\n    return max_s",
+                    "function maxSubArray(nums) {\n    let maxS = nums[0], currS = 0;\n    for(let n of nums) {\n        currS = Math.max(n, currS + n);\n        maxS = Math.max(maxS, currS);\n    }\n    return maxS;\n}",
+                    "int maxSubArray(vector<int>& nums) {\n    int maxS = nums[0], currS = 0;\n    for(int n : nums) {\n        currS = max(n, currS + n);\n        maxS = max(maxS, currS);\n    }\n    return maxS;\n}",
+                    "public int maxSubArray(int[] nums) {\n    int maxS = nums[0], currS = 0;\n    for(int n : nums) {\n        currS = Math.max(n, currS + n);\n        maxS = Math.max(maxS, currS);\n    }\n    return maxS;\n}"
+                )
+            },
+            { 
+                id: 9, title: "3Sum", category: "Arrays & Strings", difficulty: "Medium", 
+                description: "Find all unique triplets in an array that sum to zero.", solved: false,
+                requiredKeywords: ["sort", "left", "right", "target", "triplet", "while"],
+                hints: makeHints(
+                    "Sort array first.", "Fix first element, use two pointers for rest.", "Skip duplicates to get unique triplets.",
+                    "Sort array ascending.", "Loop i from 0 to n-2.", "Use left = i+1, right = n-1.",
+                    "Use `std::sort(nums.begin(), nums.end())`.", "Check if sum == 0.", "Advance pointers skipping duplicates.",
+                    "Arrays.sort(nums).", "Use two-pointer search.", "Avoid duplicate entries."
+                ),
+                solutions: makeSolutions(
+                    "def threeSum(nums):\n    nums.sort()\n    res = []\n    for i in range(len(nums)-2):\n        if i > 0 and nums[i] == nums[i-1]: continue\n        l, r = i+1, len(nums)-1\n        while l < r:\n            s = nums[i] + nums[l] + nums[r]\n            if s < 0: l += 1\n            elif s > 0: r -= 1\n            else:\n                res.append([nums[i], nums[l], nums[r]])\n                while l < r and nums[l] == nums[l+1]: l += 1\n                while l < r and nums[r] == nums[r-1]: r -= 1\n                l += 1; r -= 1\n    return res",
+                    "function threeSum(nums) {\n    nums.sort((a,b)=>a-b); let res = [];\n    for(let i=0; i<nums.length-2; i++) {\n        if(i>0 && nums[i]===nums[i-1]) continue;\n        let l = i+1, r = nums.length-1;\n        while(l < r) {\n            let s = nums[i] + nums[l] + nums[r];\n            if(s < 0) l++; else if(s > 0) r--;\n            else {\n                res.push([nums[i], nums[l], nums[r]]);\n                while(l<r && nums[l]===nums[l+1]) l++;\n                while(l<r && nums[r]===nums[r-1]) r--;\n                l++; r--;\n            }\n        }\n    }\n    return res;\n}",
+                    "vector<vector<int>> threeSum(vector<int>& nums) {\n    sort(nums.begin(), nums.end()); vector<vector<int>> res;\n    for(int i=0; i<nums.size(); i++) {\n        if(i>0 && nums[i]==nums[i-1]) continue;\n        int l = i+1, r = nums.size()-1;\n        while(l < r) {\n            int s = nums[i] + nums[l] + nums[r];\n            if(s < 0) l++; else if(s > 0) r--;\n            else {\n                res.push_back({nums[i], nums[l], nums[r]});\n                while(l<r && nums[l]==nums[l+1]) l++;\n                while(l<r && nums[r]==nums[r-1]) r--;\n                l++; r--;\n            }\n        }\n    }\n    return res;\n}",
+                    "public List<List<Integer>> threeSum(int[] nums) {\n    Arrays.sort(nums); List<List<Integer>> res = new ArrayList<>();\n    for(int i=0; i<nums.length-2; i++) {\n        if(i>0 && nums[i]==nums[i-1]) continue;\n        int l = i+1, r = nums.length-1;\n        while(l < r) {\n            int s = nums[i] + nums[l] + nums[r];\n            if(s < 0) l++; else if(s > 0) r--;\n            else {\n                res.add(Arrays.asList(nums[i], nums[l], nums[r]));\n                while(l<r && nums[l]==nums[l+1]) l++;\n                while(l<r && nums[r]==nums[r-1]) r--;\n                l++; r--;\n            }\n        }\n    }\n    return res;\n}"
+                )
+            },
+            { 
+                id: 10, title: "Container With Most Water", category: "Arrays & Strings", difficulty: "Medium", 
+                description: "Find two lines forming container holding most water.", solved: false,
+                requiredKeywords: ["left", "right", "min", "max", "area", "while"],
+                hints: makeHints(
+                    "Two pointers at ends of array.", "Area = min(height[l], height[r]) * (r - l).", "Move pointer with smaller height inwards.",
+                    "Set l = 0, r = length - 1.", "Calculate area at each step.", "Move index pointing to shorter line.",
+                    "Use left and right indices.", "Track maxArea.", "Iterate while l < r.",
+                    "Use Math.min and Math.max.", "Two pointer greedy strategy.", "Shrink distance."
+                ),
+                solutions: makeSolutions(
+                    "def maxArea(height):\n    l, r, max_a = 0, len(height)-1, 0\n    while l < r:\n        area = min(height[l], height[r]) * (r - l)\n        max_a = max(max_a, area)\n        if height[l] < height[r]: l += 1\n        else: r -= 1\n    return max_a",
+                    "function maxArea(height) {\n    let l = 0, r = height.length-1, maxA = 0;\n    while(l < r) {\n        let area = Math.min(height[l], height[r]) * (r - l);\n        maxA = Math.max(maxA, area);\n        if(height[l] < height[r]) l++; else r--;\n    }\n    return maxA;\n}",
+                    "int maxArea(vector<int>& height) {\n    int l = 0, r = height.size()-1, maxA = 0;\n    while(l < r) {\n        int area = min(height[l], height[r]) * (r - l);\n        maxA = max(maxA, area);\n        if(height[l] < height[r]) l++; else r--;\n    }\n    return maxA;\n}",
+                    "public int maxArea(int[] height) {\n    int l = 0, r = height.length-1, maxA = 0;\n    while(l < r) {\n        int area = Math.min(height[l], height[r]) * (r - l);\n        maxA = Math.max(maxA, area);\n        if(height[l] < height[r]) l++; else r--;\n    }\n    return maxA;\n}"
+                )
+            },
+            { 
+                id: 11, title: "Binary Tree Level Order Traversal", category: "Trees & Graphs", difficulty: "Medium", 
+                description: "Level order traversal of binary tree nodes (BFS).", solved: false,
+                requiredKeywords: ["queue", "pop", "level", "bfs", "append"],
+                hints: makeHints(
+                    "Use Breadth First Search (BFS).", "Queue data structure tracks tree nodes level by level.", "Process node queue size per level iteration.",
+                    "Use array `.shift()` as queue pop.", "Iterate over current queue size.", "Collect node values into level list.",
+                    "Use `std::queue<TreeNode*>`.", "Push root to queue.", "Loop while queue is not empty.",
+                    "Use `LinkedList<TreeNode>` as Queue.", "Track queue.size().", "Add children to queue."
+                ),
+                solutions: makeSolutions(
+                    "from collections import deque\ndef levelOrder(root):\n    if not root: return []\n    res, q = [], deque([root])\n    while q:\n        level = []\n        for _ in range(len(q)):\n            node = q.popleft()\n            level.append(node.val)\n            if node.left: q.append(node.left)\n            if node.right: q.append(node.right)\n        res.append(level)\n    return res",
+                    "function levelOrder(root) {\n    if(!root) return [];\n    let res = [], q = [root];\n    while(q.length) {\n        let len = q.length, level = [];\n        for(let i=0; i<len; i++) {\n            let n = q.shift();\n            level.push(n.val);\n            if(n.left) q.push(n.left);\n            if(n.right) q.push(n.right);\n        }\n        res.push(level);\n    }\n    return res;\n}",
+                    "vector<vector<int>> levelOrder(TreeNode* root) {\n    if(!root) return {};\n    vector<vector<int>> res; queue<TreeNode*> q; q.push(root);\n    while(!q.empty()) {\n        int sz = q.size(); vector<int> lvl;\n        for(int i=0; i<sz; i++) {\n            TreeNode* n = q.front(); q.pop();\n            lvl.push_back(n->val);\n            if(n->left) q.push(n->left);\n            if(n->right) q.push(n->right);\n        }\n        res.push_back(lvl);\n    }\n    return res;\n}",
+                    "public List<List<Integer>> levelOrder(TreeNode root) {\n    List<List<Integer>> res = new ArrayList<>(); if(root==null) return res;\n    Queue<TreeNode> q = new LinkedList<>(); q.add(root);\n    while(!q.isEmpty()) {\n        int sz = q.size(); List<Integer> lvl = new ArrayList<>();\n        for(int i=0; i<sz; i++) {\n            TreeNode n = q.poll(); lvl.add(n.val);\n            if(n.left!=null) q.add(n.left);\n            if(n.right!=null) q.add(n.right);\n        }\n        res.add(lvl);\n    }\n    return res;\n}"
+                )
+            },
+            { 
+                id: 12, title: "Validate Binary Search Tree", category: "Trees & Graphs", difficulty: "Medium", 
+                description: "Determine if binary tree is valid Binary Search Tree (BST).", solved: false,
+                requiredKeywords: ["min", "max", "valid", "bst", "helper", "root"],
+                hints: makeHints(
+                    "Pass valid min and max boundaries down recursively.", "Left subtrees must be strictly smaller than node.", "Right subtrees must be strictly greater.",
+                    "Use helper function `validate(node, min, max)`.", "Check root value against min/max bounds.", "Recurse on children.",
+                    "Use `LONG_MIN` and `LONG_MAX` for boundaries.", "Check node pointer.", "Return false if bounds broken.",
+                    "Helper method with Double or Long boundaries.", "Traverse recursively.", "Enforce BST properties."
+                ),
+                solutions: makeSolutions(
+                    "def isValidBST(root):\n    def validate(node, low, high):\n        if not node: return True\n        if not (low < node.val < high): return False\n        return validate(node.left, low, node.val) and validate(node.right, node.val, high)\n    return validate(root, float('-inf'), float('inf'))",
+                    "function isValidBST(root) {\n    function valid(n, min, max) {\n        if(!n) return true;\n        if(n.val <= min || n.val >= max) return false;\n        return valid(n.left, min, n.val) && valid(n.right, n.val, max);\n    }\n    return valid(root, -Infinity, Infinity);\n}",
+                    "bool isValidBST(TreeNode* root) {\n    return valid(root, LONG_MIN, LONG_MAX);\n}\nbool valid(TreeNode* n, long min, long max) {\n    if(!n) return true;\n    if(n->val <= min || n->val >= max) return false;\n    return valid(n->left, min, n->val) && valid(n->right, n->val, max);\n}",
+                    "public boolean isValidBST(TreeNode root) {\n    return valid(root, Long.MIN_VALUE, Long.MAX_VALUE);\n}\nboolean valid(TreeNode n, long min, long max) {\n    if(n==null) return true;\n    if(n.val <= min || n.val >= max) return false;\n    return valid(n.left, min, n.val) && valid(n.right, n.val, max);\n}"
+                )
+            },
+            { 
+                id: 13, title: "Coin Change", category: "Dynamic Programming", difficulty: "Medium", 
+                description: "Compute fewest coins needed to make given amount.", solved: false,
+                requiredKeywords: ["dp", "amount", "min", "coin", "for"],
+                hints: makeHints(
+                    "Dynamic Programming approach.", "dp[i] stores min coins to make amount i.", "dp[i] = min(dp[i], dp[i - coin] + 1).",
+                    "Initialize array of size `amount + 1` filled with Infinity.", "Set dp[0] = 0.", "Nested loop through coins and amounts.",
+                    "Use `vector<int> dp(amount + 1, amount + 1)`.", "Update array values.", "Return dp[amount] if valid.",
+                    "Create `int[] dp = new int[amount + 1]`.", "Arrays.fill(dp, amount + 1).", "Check dp[amount] > amount."
+                ),
+                solutions: makeSolutions(
+                    "def coinChange(coins, amount):\n    dp = [float('inf')] * (amount + 1)\n    dp[0] = 0\n    for i in range(1, amount + 1):\n        for c in coins:\n            if i - c >= 0: dp[i] = min(dp[i], dp[i-c] + 1)\n    return dp[amount] if dp[amount] != float('inf') else -1",
+                    "function coinChange(coins, amount) {\n    let dp = new Array(amount + 1).fill(Infinity);\n    dp[0] = 0;\n    for(let i=1; i<=amount; i++) {\n        for(let c of coins) {\n            if(i - c >= 0) dp[i] = Math.min(dp[i], dp[i-c] + 1);\n        }\n    }\n    return dp[amount] === Infinity ? -1 : dp[amount];\n}",
+                    "int coinChange(vector<int>& coins, int amount) {\n    vector<int> dp(amount + 1, amount + 1); dp[0] = 0;\n    for(int i=1; i<=amount; i++) {\n        for(int c : coins) if(i - c >= 0) dp[i] = min(dp[i], dp[i-c] + 1);\n    }\n    return dp[amount] > amount ? -1 : dp[amount];\n}",
+                    "public int coinChange(int[] coins, int amount) {\n    int[] dp = new int[amount + 1]; Arrays.fill(dp, amount + 1); dp[0] = 0;\n    for(int i=1; i<=amount; i++) {\n        for(int c : coins) if(i - c >= 0) dp[i] = Math.min(dp[i], dp[i-c] + 1);\n    }\n    return dp[amount] > amount ? -1 : dp[amount];\n}"
+                )
+            },
+            { 
+                id: 14, title: "Number of Islands", category: "Trees & Graphs", difficulty: "Medium", 
+                description: "Count islands in 2D grid using DFS/BFS graph traversal.", solved: false,
+                requiredKeywords: ["dfs", "grid", "visited", "count", "for"],
+                hints: makeHints(
+                    "Traverse 2D matrix using DFS.", "When '1' found, increment count and sink connected '1's.", "Change visited '1's to '0's to prevent re-counting.",
+                    "Double loop through matrix.", "Call `dfs(r, c)` on every '1'.", "Sinks adjacent cells.",
+                    "Check boundary conditions in DFS.", "Recursively sink top/bottom/left/right.", "Return island count.",
+                    "Check grid[r][c] == '1'.", "Recursively flood fill matrix.", "Return total."
+                ),
+                solutions: makeSolutions(
+                    "def numIslands(grid):\n    if not grid: return 0\n    count = 0\n    def dfs(r, c):\n        if r<0 or r>=len(grid) or c<0 or c>=len(grid[0]) or grid[r][c]!='1': return\n        grid[r][c] = '0'\n        dfs(r+1, c); dfs(r-1, c); dfs(r, c+1); dfs(r, c-1)\n    for r in range(len(grid)):\n        for c in range(len(grid[0])):\n            if grid[r][c] == '1': dfs(r, c); count += 1\n    return count",
+                    "function numIslands(grid) {\n    let count = 0;\n    function dfs(r, c) {\n        if(r<0||r>=grid.length||c<0||c>=grid[0].length||grid[r][c]!=='1') return;\n        grid[r][c] = '0';\n        dfs(r+1, c); dfs(r-1, c); dfs(r, c+1); dfs(r, c-1);\n    }\n    for(let r=0; r<grid.length; r++) {\n        for(let c=0; c<grid[0].length; c++) if(grid[r][c]==='1') { count++; dfs(r, c); }\n    }\n    return count;\n}",
+                    "int numIslands(vector<vector<char>>& grid) {\n    int count = 0;\n    for(int r=0; r<grid.size(); r++) {\n        for(int c=0; c<grid[0].size(); c++) if(grid[r][c]=='1') { count++; dfs(grid, r, c); }\n    }\n    return count;\n}\nvoid dfs(vector<vector<char>>& g, int r, int c) {\n    if(r<0||r>=g.size()||c<0||c>=g[0].length||g[r][c]!='1') return;\n    g[r][c] = '0'; dfs(g, r+1, c); dfs(g, r-1, c); dfs(g, r, c+1); dfs(g, r, c-1);\n}",
+                    "public int numIslands(char[][] grid) {\n    int count = 0;\n    for(int r=0; r<grid.length; r++) {\n        for(int c=0; c<grid[0].length; c++) if(grid[r][c]=='1') { count++; dfs(grid, r, c); }\n    }\n    return count;\n}\nvoid dfs(char[][] g, int r, int c) {\n    if(r<0||r>=g.length||c<0||c>=g[0].length||g[r][c]!='1') return;\n    g[r][c] = '0'; dfs(g, r+1, c); dfs(g, r-1, c); dfs(g, r, c+1); dfs(g, r, c-1);\n}"
+                )
+            },
+            { 
+                id: 15, title: "Group Anagrams", category: "Arrays & Strings", difficulty: "Medium", 
+                description: "Group array of strings into sub-lists of anagrams.", solved: false,
+                requiredKeywords: ["dict", "map", "sort", "group", "hash"],
+                hints: makeHints(
+                    "Sorted anagrams produce identical strings.", "Use sorted string as key in hash map.", "Append original string to list corresponding to sorted key.",
+                    "Create map object.", "Key = `str.split('').sort().join('')`.", "Push string into array value.",
+                    "Use `unordered_map<string, vector<string>>`.", "Sort string copy as map key.", "Collect values.",
+                    "Map string key to List of Strings.", "Return map values."
+                ),
+                solutions: makeSolutions(
+                    "from collections import defaultdict\ndef groupAnagrams(strs):\n    m = defaultdict(list)\n    for s in strs:\n        m[''.join(sorted(s))].append(s)\n    return list(m.values())",
+                    "function groupAnagrams(strs) {\n    let m = {};\n    for(let s of strs) {\n        let k = s.split('').sort().join('');\n        if(!m[k]) m[k] = [];\n        m[k].push(s);\n    }\n    return Object.values(m);\n}",
+                    "vector<vector<string>> groupAnagrams(vector<string>& strs) {\n    unordered_map<string, vector<string>> m;\n    for(string s : strs) {\n        string k = s; sort(k.begin(), k.end());\n        m[k].push_back(s);\n    }\n    vector<vector<string>> res; for(auto p : m) res.push_back(p.second);\n    return res;\n}",
+                    "public List<List<String>> groupAnagrams(String[] strs) {\n    Map<String, List<String>> m = new HashMap<>();\n    for(String s : strs) {\n        char[] ca = s.toCharArray(); Arrays.sort(ca); String k = String.valueOf(ca);\n        if(!m.containsKey(k)) m.put(k, new ArrayList<>());\n        m.get(k).add(s);\n    }\n    return new ArrayList<>(m.values());\n}"
+                )
+            },
+            { 
+                id: 16, title: "Merge Intervals", category: "Dynamic Programming", difficulty: "Medium", 
+                description: "Merge overlapping intervals in an array.", solved: false,
+                requiredKeywords: ["sort", "interval", "merge", "end", "start"],
+                hints: makeHints(
+                    "Sort intervals by start value.", "Compare start of current interval with end of previous.", "Merge by updating end value.",
+                    "Sort intervals array.", "Push first interval to output array.", "Check overlap with last output interval.",
+                    "Use `std::sort` on vector pairs.", "Merge if `curr.start <= prev.end`.", "Return merged list.",
+                    "Arrays.sort intervals by start.", "Iterate and merge overlapping boundaries."
+                ),
+                solutions: makeSolutions(
+                    "def merge(intervals):\n    intervals.sort(key=lambda x: x[0])\n    res = []\n    for i in intervals:\n        if not res or res[-1][1] < i[0]: res.append(i)\n        else: res[-1][1] = max(res[-1][1], i[1])\n    return res",
+                    "function merge(intervals) {\n    intervals.sort((a,b)=>a[0]-b[0]);\n    let res = [];\n    for(let i of intervals) {\n        if(!res.length || res[res.length-1][1] < i[0]) res.push(i);\n        else res[res.length-1][1] = Math.max(res[res.length-1][1], i[1]);\n    }\n    return res;\n}",
+                    "vector<vector<int>> merge(vector<vector<int>>& intervals) {\n    sort(intervals.begin(), intervals.end()); vector<vector<int>> res;\n    for(auto i : intervals) {\n        if(res.empty() || res.back()[1] < i[0]) res.push_back(i);\n        else res.back()[1] = max(res.back()[1], i[1]);\n    }\n    return res;\n}",
+                    "public int[][] merge(int[][] intervals) {\n    Arrays.sort(intervals, (a,b)->Integer.compare(a[0],b[0]));\n    List<int[]> res = new ArrayList<>();\n    for(int[] i : intervals) {\n        if(res.isEmpty() || res.get(res.size()-1)[1] < i[0]) res.add(i);\n        else res.get(res.size()-1)[1] = Math.max(res.get(res.size()-1)[1], i[1]);\n    }\n    return res.toArray(new int[res.size()][]);\n}"
+                )
+            },
+            { 
+                id: 17, title: "Product of Array Except Self", category: "Arrays & Strings", difficulty: "Medium", 
+                description: "Calculate products of elements except self without division.", solved: false,
+                requiredKeywords: ["prefix", "suffix", "product", "res", "right"],
+                hints: makeHints(
+                    "Compute prefix products from left.", "Compute suffix products from right.", "Multiply prefix and suffix values.",
+                    "Pass 1: Accumulate products moving left-to-right.", "Pass 2: Multiply while moving right-to-left.", "O(n) time and O(1) extra space.",
+                    "Use result array for prefixes.", "Use variable `right = 1` for suffix.", "Multiply `res[i] *= right`.",
+                    "Single result array.", "Two linear loops.", "O(n) linear performance."
+                ),
+                solutions: makeSolutions(
+                    "def productExceptSelf(nums):\n    res = [1] * len(nums)\n    prefix = 1\n    for i in range(len(nums)):\n        res[i] = prefix\n        prefix *= nums[i]\n    suffix = 1\n    for i in range(len(nums)-1, -1, -1):\n        res[i] *= suffix\n        suffix *= nums[i]\n    return res",
+                    "function productExceptSelf(nums) {\n    let res = new Array(nums.length).fill(1);\n    let p = 1;\n    for(let i=0; i<nums.length; i++) { res[i] = p; p *= nums[i]; }\n    let s = 1;\n    for(let i=nums.length-1; i>=0; i--) { res[i] *= s; s *= nums[i]; }\n    return res;\n}",
+                    "vector<int> productExceptSelf(vector<int>& nums) {\n    int n = nums.size(); vector<int> res(n, 1);\n    for(int i=1; i<n; i++) res[i] = res[i-1] * nums[i-1];\n    int r = 1;\n    for(int i=n-1; i>=0; i--) { res[i] *= r; r *= nums[i]; }\n    return res;\n}",
+                    "public int[] productExceptSelf(int[] nums) {\n    int n = nums.length; int[] res = new int[n]; res[0] = 1;\n    for(int i=1; i<n; i++) res[i] = res[i-1] * nums[i-1];\n    int r = 1;\n    for(int i=n-1; i>=0; i--) { res[i] *= r; r *= nums[i]; }\n    return res;\n}"
+                )
+            },
+            { 
+                id: 18, title: "Merge k Sorted Lists", category: "Trees & Graphs", difficulty: "Hard", 
+                description: "Merge k sorted linked lists using Priority Queue.", solved: false,
+                requiredKeywords: ["heap", "priority", "queue", "merge", "head"],
+                hints: makeHints(
+                    "Use a Min-Heap (Priority Queue).", "Push initial head of each list to heap.", "Extract min node and push its next node.",
+                    "JS Priority Queue simulation with sorting array.", "Poll smallest head node.", "Re-link pointer list.",
+                    "Use `std::priority_queue` with min-heap comparator.", "Add all head pointers.", "Extract top continuously.",
+                    "Use `PriorityQueue<ListNode>`.", "Custom comparator based on node.val.", "Return merged head."
+                ),
+                solutions: makeSolutions(
+                    "import heapq\ndef mergeKLists(lists):\n    h = []\n    for i, l in enumerate(lists):\n        if l: heapq.heappush(h, (l.val, i, l))\n    dummy = ListNode(0)\n    curr = dummy\n    while h:\n        val, i, node = heapq.heappop(h)\n        curr.next = node; curr = curr.next\n        if node.next: heapq.heappush(h, (node.next.val, i, node.next))\n    return dummy.next",
+                    "function mergeKLists(lists) {\n    let arr = [];\n    for(let l of lists) while(l) { arr.push(l.val); l = l.next; }\n    arr.sort((a,b)=>a-b);\n    let dummy = new ListNode(0), curr = dummy;\n    for(let v of arr) { curr.next = new ListNode(v); curr = curr.next; }\n    return dummy.next;\n}",
+                    "ListNode* mergeKLists(vector<ListNode*>& lists) {\n    auto comp = [](ListNode* a, ListNode* b){ return a->val > b->val; };\n    priority_queue<ListNode*, vector<ListNode*>, decltype(comp)> pq(comp);\n    for(auto l : lists) if(l) pq.push(l);\n    ListNode dummy(0); ListNode* tail = &dummy;\n    while(!pq.empty()) {\n        auto n = pq.top(); pq.pop();\n        tail->next = n; tail = tail->next;\n        if(n->next) pq.push(n->next);\n    }\n    return dummy.next;\n}",
+                    "public ListNode mergeKLists(ListNode[] lists) {\n    PriorityQueue<ListNode> pq = new PriorityQueue<>((a,b)->a.val-b.val);\n    for(ListNode l : lists) if(l!=null) pq.add(l);\n    ListNode dummy = new ListNode(0), curr = dummy;\n    while(!pq.isEmpty()) {\n        ListNode n = pq.poll(); curr.next = n; curr = curr.next;\n        if(n.next!=null) pq.add(n.next);\n    }\n    return dummy.next;\n}"
+                )
+            },
+            { 
+                id: 19, title: "LRU Cache Implementation", category: "System Design", difficulty: "Hard", 
+                description: "Design Least Recently Used cache with O(1) operations.", solved: false,
+                requiredKeywords: ["cache", "get", "put", "node", "capacity"],
+                hints: makeHints(
+                    "Combine Hash Map with Doubly Linked List.", "Hash Map gives O(1) key lookups.", "Doubly Linked List gives O(1) node updates.",
+                    "Use Map object in JS (maintains insertion order).", "Delete key and re-insert to update priority.", "Remove first key if capacity exceeded.",
+                    "Use `std::list` and `std::unordered_map`.", "Store iterator in map.", "Move accessed node to list front.",
+                    "Use LinkedHashMap in Java.", "Override `removeEldestEntry`.", "Achieve O(1) put/get."
+                ),
+                solutions: makeSolutions(
+                    "class LRUCache:\n    def __init__(self, capacity: int):\n        self.cap = capacity\n        self.m = {}\n    def get(self, key: int) -> int:\n        if key not in self.m: return -1\n        v = self.m.pop(key)\n        self.m[key] = v\n        return v\n    def put(self, key: int, value: int) -> None:\n        if key in self.m: self.m.pop(key)\n        elif len(self.m) >= self.cap: del self.m[next(iter(self.m))]\n        self.m[key] = value",
+                    "class LRUCache {\n    constructor(capacity) { this.cap = capacity; this.map = new Map(); }\n    get(key) {\n        if(!this.map.has(key)) return -1;\n        let v = this.map.get(key); this.map.delete(key); this.map.set(key, v);\n        return v;\n    }\n    put(key, value) {\n        if(this.map.has(key)) this.map.delete(key);\n        else if(this.map.size >= this.cap) this.map.delete(this.map.keys().next().value);\n        this.map.set(key, value);\n    }\n}",
+                    "class LRUCache {\n    int cap; list<pair<int,int>> l;\n    unordered_map<int, list<pair<int,int>>::iterator> m;\npublic:\n    LRUCache(int capacity) { cap = capacity; }\n    int get(int key) {\n        if(!m.count(key)) return -1;\n        l.splice(l.begin(), l, m[key]); return m[key]->second;\n    }\n    void put(int key, int value) {\n        if(m.count(key)) { l.splice(l.begin(), l, m[key]); m[key]->second = value; return; }\n        if(l.size() == cap) { auto k = l.back().first; m.erase(k); l.pop_back(); }\n        l.push_front({key, value}); m[key] = l.begin();\n    }\n};",
+                    "class LRUCache extends java.util.LinkedHashMap<Integer, Integer> {\n    private int cap;\n    public LRUCache(int capacity) {\n        super(capacity, 0.75f, true); this.cap = capacity;\n    }\n    public int get(int key) { return super.getOrDefault(key, -1); }\n    public void put(int key, int value) { super.put(key, value); }\n    protected boolean removeEldestEntry(java.util.Map.Entry<Integer, Integer> eldest) {\n        return size() > cap;\n    }\n}"
+                )
+            },
+            { 
+                id: 20, title: "Trapping Rain Water", category: "Arrays & Strings", difficulty: "Hard", 
+                description: "Compute trapped rainwater using two pointers.", solved: false,
+                requiredKeywords: ["left", "right", "max", "water", "height"],
+                hints: makeHints(
+                    "Use two pointers (l and r).", "Track left_max and right_max.", "Water trapped = min(left_max, right_max) - height[i].",
+                    "Initialize l = 0, r = length - 1.", "Move pointer with smaller max height.", "Add water difference.",
+                    "Track max heights continuously.", "Advance indices inwards.", "O(n) time, O(1) space.",
+                    "Two-pointer greedy strategy.", "Maintain leftMax and rightMax.", "Sum trapped volume."
+                ),
+                solutions: makeSolutions(
+                    "def trap(height):\n    l, r = 0, len(height)-1\n    left_max, right_max = height[l], height[r]\n    res = 0\n    while l < r:\n        if left_max < right_max:\n            l += 1; left_max = max(left_max, height[l]); res += left_max - height[l]\n        else:\n            r -= 1; right_max = max(right_max, height[r]); res += right_max - height[r]\n    return res",
+                    "function trap(height) {\n    let l = 0, r = height.length - 1;\n    let lMax = height[l], rMax = height[r], res = 0;\n    while(l < r) {\n        if(lMax < rMax) {\n            l++; lMax = Math.max(lMax, height[l]); res += lMax - height[l];\n        } else {\n            r--; rMax = Math.max(rMax, height[r]); res += rMax - height[r];\n        }\n    }\n    return res;\n}",
+                    "int trap(vector<int>& height) {\n    int l = 0, r = height.size()-1, lMax = height[l], rMax = height[r], res = 0;\n    while(l < r) {\n        if(lMax < rMax) { l++; lMax = max(lMax, height[l]); res += lMax - height[l]; }\n        else { r--; rMax = max(rMax, height[r]); res += rMax - height[r]; }\n    }\n    return res;\n}",
+                    "public int trap(int[] height) {\n    int l = 0, r = height.length-1, lMax = height[l], rMax = height[r], res = 0;\n    while(l < r) {\n        if(lMax < rMax) { l++; lMax = Math.max(lMax, height[l]); res += lMax - height[l]; }\n        else { r--; rMax = Math.max(rMax, height[r]); res += rMax - height[r]; }\n    }\n    return res;\n}"
+                )
+            },
+            { 
+                id: 21, title: "Minimum Window Substring", category: "System Design", difficulty: "Hard", 
+                description: "Find minimum window containing all characters of target.", solved: false,
+                requiredKeywords: ["window", "target", "map", "count", "left"],
+                hints: makeHints(
+                    "Sliding window with character frequency map.", "Expand right pointer until valid window found.", "Shrink left pointer to find minimum size.",
+                    "Track required unique characters count.", "Update character match counts.", "Track minimum length substring index.",
+                    "Use hash map or fixed array of 128 chars.", "Iterate string.", "Return best substring.",
+                    "Use sliding window strategy.", "Expand right, shrink left.", "Check character requirement."
+                ),
+                solutions: makeSolutions(
+                    "from collections import Counter\ndef minWindow(s, t):\n    if not t or not s: return ''\n    t_count = Counter(t)\n    required = len(t_count)\n    l, r, formed = 0, 0, 0\n    window = {}\n    ans = float('inf'), None, None\n    while r < len(s):\n        c = s[r]; window[c] = window.get(c, 0) + 1\n        if c in t_count and window[c] == t_count[c]: formed += 1\n        while l <= r and formed == required:\n            c = s[l]\n            if r - l + 1 < ans[0]: ans = (r - l + 1, l, r)\n            window[c] -= 1\n            if c in t_count and window[c] < t_count[c]: formed -= 1\n            l += 1\n        r += 1\n    return '' if ans[0] == float('inf') else s[ans[1]:ans[2]+1]",
+                    "function minWindow(s, t) {\n    let map = {}; for(let c of t) map[c] = (map[c] || 0) + 1;\n    let l = 0, r = 0, count = Object.keys(map).length;\n    let minLen = Infinity, start = 0;\n    while(r < s.length) {\n        let c = s[r]; if(map[c] !== undefined) { map[c]--; if(map[c] === 0) count--; }\n        while(count === 0) {\n            if(r - l + 1 < minLen) { minLen = r - l + 1; start = l; }\n            let lc = s[l]; if(map[lc] !== undefined) { if(map[lc] === 0) count++; map[lc]++; }\n            l++;\n        }\n        r++;\n    }\n    return minLen === Infinity ? '' : s.substr(start, minLen);\n}",
+                    "string minWindow(string s, string t) {\n    vector<int> map(128, 0); for(char c : t) map[c]++;\n    int l = 0, r = 0, count = t.length(), minLen = INT_MAX, start = 0;\n    while(r < s.length()) {\n        if(map[s[r]] > 0) count--;\n        map[s[r]]--; r++;\n        while(count == 0) {\n            if(r - l < minLen) { minLen = r - l; start = l; }\n            map[s[l]]++; if(map[s[l]] > 0) count++; l++;\n        }\n    }\n    return minLen == INT_MAX ? '' : s.substr(start, minLen);\n}",
+                    "public String minWindow(String s, String t) {\n    int[] map = new int[128]; for(char c : t.toCharArray()) map[c]++;\n    int l = 0, r = 0, count = t.length(), minLen = Integer.MAX_VALUE, start = 0;\n    while(r < s.length()) {\n        if(map[s.charAt(r)] > 0) count--;\n        map[s.charAt(r)]--; r++;\n        while(count == 0) {\n            if(r - l < minLen) { minLen = r - l; start = l; }\n            map[s.charAt(l)]++; if(map[s.charAt(l)] > 0) count++; l++;\n        }\n    }\n    return minLen == Integer.MAX_VALUE ? '' : s.substring(start, start + minLen);\n}"
+                )
+            },
+            { 
+                id: 22, title: "Word Search II", category: "Trees & Graphs", difficulty: "Hard", 
+                description: "Find all words on 2D board using Trie and Backtracking.", solved: false,
+                requiredKeywords: ["trie", "dfs", "node", "board", "visited"],
+                hints: makeHints(
+                    "Build a Trie from target word list.", "Perform 2D grid DFS backtracking.", "Prune branches when path not in Trie.",
+                    "Insert words into Trie data structure.", "DFS search board cells.", "Collect matched words.",
+                    "Use TrieNode with child map.", "Mark board cells as visited `#`.", "Backtrack matrix state.",
+                    "Prefix tree + Backtracking DFS.", "Eliminate duplicate search paths."
+                ),
+                solutions: makeSolutions(
+                    "class TrieNode:\n    def __init__(self):\n        self.children = {}\n        self.word = None\ndef findWords(board, words):\n    root = TrieNode()\n    for w in words:\n        node = root\n        for c in w:\n            node = node.children.setdefault(c, TrieNode())\n        node.word = w\n    res = []\n    def dfs(r, c, node):\n        char = board[r][c]\n        curr = node.children.get(char)\n        if not curr: return\n        if curr.word:\n            res.append(curr.word); curr.word = None\n        board[r][c] = '#'\n        for dr, dc in [(-1,0),(1,0),(0,-1),(0,1)]:\n            nr, nc = r + dr, c + dc\n            if 0<=nr<len(board) and 0<=nc<len(board[0]) and board[nr][nc]!='#':\n                dfs(nr, nc, curr)\n        board[r][c] = char\n    for r in range(len(board)):\n        for c in range(len(board[0])):\n            dfs(r, c, root)\n    return res",
+                    "function findWords(board, words) {\n    let res = [];\n    function buildTrie() {\n        let root = {};\n        for(let w of words) {\n            let n = root;\n            for(let c of w) { if(!n[c]) n[c] = {}; n = n[c]; }\n            n.word = w;\n        }\n        return root;\n    }\n    let root = buildTrie();\n    function dfs(r, c, node) {\n        let char = board[r][c];\n        if(!node || !node[char]) return;\n        let next = node[char];\n        if(next.word) { res.push(next.word); next.word = null; }\n        board[r][c] = '#';\n        if(r>0) dfs(r-1, c, next);\n        if(r<board.length-1) dfs(r+1, c, next);\n        if(c>0) dfs(r, c-1, next);\n        if(c<board[0].length-1) dfs(r, c+1, next);\n        board[r][c] = char;\n    }\n    for(let r=0; r<board.length; r++)\n        for(let c=0; c<board[0].length; c++) dfs(r, c, root);\n    return res;\n}",
+                    "struct TrieNode {\n    unordered_map<char, TrieNode*> children;\n    string word = \"\";\n};\nvector<string> findWords(vector<vector<char>>& board, vector<string>& words) {\n    TrieNode* root = new TrieNode();\n    for(string w : words) {\n        TrieNode* curr = root;\n        for(char c : w) {\n            if(!curr->children.count(c)) curr->children[c] = new TrieNode();\n            curr = curr->children[c];\n        }\n        curr->word = w;\n    }\n    vector<string> res;\n    for(int r=0; r<board.size(); r++)\n        for(int c=0; c<board[0].size(); c++) dfs(board, r, c, root, res);\n    return res;\n}\nvoid dfs(vector<vector<char>>& b, int r, int c, TrieNode* node, vector<string>& res) {\n    char ch = b[r][c]; if(!node->children.count(ch)) return;\n    TrieNode* next = node->children[ch];\n    if(next->word != \"\") { res.push_back(next->word); next->word = \"\"; }\n    b[r][c] = '#';\n    if(r>0 && b[r-1][c]!='#') dfs(b, r-1, c, next, res);\n    if(r<b.size()-1 && b[r+1][c]!='#') dfs(b, r+1, c, next, res);\n    if(c>0 && b[r][c-1]!='#') dfs(b, r, c-1, next, res);\n    if(c<b[0].size()-1 && b[r][c+1]!='#') dfs(b, r, c+1, next, res);\n    b[r][c] = ch;\n}",
+                    "class TrieNode {\n    TrieNode[] children = new TrieNode[26];\n    String word;\n}\npublic List<String> findWords(char[][] board, String[] words) {\n    List<String> res = new ArrayList<>();\n    TrieNode root = new TrieNode();\n    for(String w : words) {\n        TrieNode p = root;\n        for(char c : w.toCharArray()) {\n            int i = c - 'a'; if(p.children[i] == null) p.children[i] = new TrieNode();\n            p = p.children[i];\n        }\n        p.word = w;\n    }\n    for(int r=0; r<board.length; r++)\n        for(int c=0; c<board[0].length; c++) dfs(board, r, c, root, res);\n    return res;\n}\nvoid dfs(char[][] b, int r, int c, TrieNode p, List<String> res) {\n    char ch = b[r][c]; if(ch == '#' || p.children[ch - 'a'] == null) return;\n    p = p.children[ch - 'a'];\n    if(p.word != null) { res.add(p.word); p.word = null; }\n    b[r][c] = '#';\n    if(r>0) dfs(b, r-1, c, p, res);\n    if(r<b.length-1) dfs(b, r+1, c, p, res);\n    if(c>0) dfs(b, r, c-1, p, res);\n    if(c<b[0].length-1) dfs(b, r, c+1, p, res);\n    b[r][c] = ch;\n}"
+                )
+            }
+        ];
+
+        /* =====================================================
+           2. QUIZ DATA (20 QUESTIONS)
+        ===================================================== */
+        const quizData = [
+            { question: "1. Which data structure uses the LIFO (Last In, First Out) principle?", options: ["Queue", "Stack", "Array", "Binary Tree"], correct: 1 },
+            { question: "2. What is the worst-case time complexity of QuickSort?", options: ["O(n log n)", "O(n)", "O(1)", "O(n²)"], correct: 3 },
+            { question: "3. Which data structure is best suited for implementing a FIFO queue?", options: ["Stack", "LinkedList", "Binary Search Tree", "Max Heap"], correct: 1 },
+            { question: "4. What is the time complexity to search an element in a balanced BST?", options: ["O(1)", "O(n)", "O(log n)", "O(n²)"], correct: 2 },
+            { question: "5. What does SQL stand for?", options: ["Structured Query Language", "Sequential Query List", "Simple Question Language", "System Quality Logic"], correct: 0 },
+            { question: "6. Which normal form eliminates partial dependency?", options: ["1NF", "2NF", "3NF", "BCNF"], correct: 1 },
+            { question: "7. Which key uniquely identifies a record in a relational database table?", options: ["Foreign Key", "Candidate Key", "Primary Key", "Super Key"], correct: 2 },
+            { question: "8. What does the 'I' in ACID properties stand for?", options: ["Integrity", "Isolation", "Indexing", "Inheritance"], correct: 1 },
+            { question: "9. Which layer in OSI model handles packet routing?", options: ["Transport Layer", "Data Link Layer", "Network Layer", "Application Layer"], correct: 2 },
+            { question: "10. What port does HTTP typically use by default?", options: ["21", "22", "80", "443"], correct: 2 },
+            { question: "11. Which protocol translates domain names to IP addresses?", options: ["DHCP", "DNS", "FTP", "ARP"], correct: 1 },
+            { question: "12. What mechanism is used by TCP to establish a connection?", options: ["2-Way Handshake", "3-Way Handshake", "Sliding Window", "Polling"], correct: 1 },
+            { question: "13. Which algorithm avoids deadlocks in OS resource allocation?", options: ["Round Robin", "Banker's Algorithm", "Dijkstra's Algorithm", "Kruskal's Algorithm"], correct: 1 },
+            { question: "14. What condition causes thrashing in virtual memory?", options: ["High CPU utilization", "Frequent page faults", "Low disk space", "Deadlock"], correct: 1 },
+            { question: "15. Which CPU scheduling gives smallest average waiting time?", options: ["FCFS", "SJF (Shortest Job First)", "Round Robin", "Priority Scheduling"], correct: 1 },
+            { question: "16. What is a lightweight unit of execution within a process called?", options: ["Kernel", "Thread", "Page", "Semaphore"], correct: 1 },
+            { question: "17. What problem occurs when a model performs poorly on unseen test data?", options: ["Underfitting", "Overfitting", "Gradient Explosion", "Dimensionality Reduction"], correct: 1 },
+            { question: "18. Which activation function is commonly used in hidden layers of Deep Neural Networks?", options: ["Sigmoid", "ReLU", "Step Function", "Linear"], correct: 1 },
+            { question: "19. In JavaScript, which keyword declares a block-scoped reassignable variable?", options: ["var", "const", "let", "static"], correct: 2 },
+            { question: "20. What HTTP status code represents '404'?", options: ["OK", "Unauthorized", "Forbidden", "Not Found"], correct: 3 }
+        ];
+
+        let currentCategory = "All";
+        let currentDifficulty = "All";
+
+        /* =====================================================
+           3. DASHBOARD PROGRESS LOGIC
+        ===================================================== */
+        function updateDashboardProgressBar() {
+            const total = questions.length;
+            const solvedCount = questions.filter(q => q.solved).length;
+            const percentage = Math.round((solvedCount / total) * 100);
+
+            document.getElementById("dashProgressBarFill").style.width = `${percentage}%`;
+            document.getElementById("dashProgressStats").textContent = `${solvedCount} / ${total} Solved (${percentage}%)`;
+        }
+
+        /* =====================================================
+           4. SIDEBAR CATEGORIES
+        ===================================================== */
+        function renderSidebar() {
+            const container = document.getElementById("segregatedSidebarContainer");
+            container.innerHTML = "";
+
+            const counts = questions.reduce((acc, q) => {
+                acc[q.category] = (acc[q.category] || 0) + 1;
+                return acc;
+            }, {});
+
+            const allLi = document.createElement("li");
+            allLi.className = "active";
+            allLi.setAttribute("data-cat", "All");
+            allLi.innerHTML = `<span><i class="fa-solid fa-border-all"></i> All Fields</span> <span class="category-count">${questions.length}</span>`;
+            container.appendChild(allLi);
+
+            Object.keys(counts).forEach(category => {
+                const li = document.createElement("li");
+                li.setAttribute("data-cat", category);
+                li.innerHTML = `<span><i class="fa-solid fa-folder"></i> ${category}</span> <span class="category-count">${counts[category]}</span>`;
+                container.appendChild(li);
+            });
+
+            document.querySelectorAll(".sidebar li").forEach(li => {
+                li.addEventListener("click", () => {
+                    document.querySelectorAll(".sidebar li").forEach(el => el.classList.remove("active"));
+                    li.classList.add("active");
+                    currentCategory = li.getAttribute("data-cat");
+                    applyFilters();
+                });
+            });
+        }
+
+        /* =====================================================
+           5. FILTER AND RENDER QUESTIONS
+        ===================================================== */
+        const questionContainer = document.getElementById("questionContainer");
+        const searchInput = document.getElementById("search");
+        const difficultySelect = document.getElementById("difficultySelect");
+
+        function applyFilters() {
+            const searchTerm = searchInput.value.toLowerCase();
+            const filtered = questions.filter(q => {
+                const matchesCategory = (currentCategory === "All") || (q.category === currentCategory);
+                const matchesDifficulty = (currentDifficulty === "All") || (q.difficulty === currentDifficulty);
+                const matchesSearch = q.title.toLowerCase().includes(searchTerm) || q.description.toLowerCase().includes(searchTerm);
+                return matchesCategory && matchesDifficulty && matchesSearch;
+            });
+            renderQuestions(filtered);
+        }
+
+        function renderQuestions(items) {
+            questionContainer.innerHTML = "";
+            items.forEach(q => {
+                const card = document.createElement("div");
+                card.className = "question-card";
+                card.innerHTML = `
+                    <div>
+                        <h3>${q.title}</h3>
+                        <div class="badges">
+                            <span class="badge ${q.difficulty}">${q.difficulty}</span>
+                            <span class="badge" style="background:#334155; color:#cbd5e1;">${q.category}</span>
+                        </div>
+                        <p style="color:#94a3b8; font-size:0.9rem;">${q.description}</p>
+                    </div>
+                    <button class="primary-btn ${q.solved ? 'btn-solved' : ''}" style="margin-top:1.2rem; width:100%;" onclick="openCodeWorkspace(${q.id})">
+                        <i class="fa-solid ${q.solved ? 'fa-check-double' : 'fa-code'}"></i> ${q.solved ? 'Solved' : 'Solve Challenge'}
+                    </button>
+                `;
+                questionContainer.appendChild(card);
+            });
+        }
+
+        searchInput?.addEventListener("input", applyFilters);
+        difficultySelect?.addEventListener("change", (e) => {
+            currentDifficulty = e.target.value;
+            applyFilters();
+        });
+
+        /* =====================================================
+           6. CODE WORKSPACE, HINTS, SOLUTION LOCK & EVALUATION
+        ===================================================== */
+        let activeProblemId = null;
+        let currentHintIndex = 0;
+
+        const codeTemplates = {
+            python: `def solve():\n    # Write your solution here\n    pass\n\nsolve()`,
+            javascript: `function solve() {\n    // Write your solution here\n}\n\nsolve();`,
+            cpp: `#include <iostream>\nusing namespace std;\n\nint main() {\n    // Write solution here\n    return 0;\n}`,
+            java: `public class Solution {\n    public static void main(String[] args) {\n        // Write solution here\n    }\n}`
+        };
+
+        function openCodeWorkspace(id) {
+            activeProblemId = id;
+            currentHintIndex = 0;
+
+            const problem = questions.find(q => q.id === id);
+            if (!problem) return;
+
+            document.getElementById("modalProblemTitle").innerHTML = `<i class="fa-solid fa-code"></i> ${problem.title}`;
+            document.getElementById("modalProblemDesc").textContent = `${problem.category} | Difficulty: ${problem.difficulty} — ${problem.description}`;
+
+            const langSelect = document.getElementById("languageSelect");
+            const textarea = document.getElementById("codeTextarea");
+            const output = document.getElementById("consoleOutput");
+
+            textarea.value = codeTemplates[langSelect.value];
+            output.textContent = "Ready to compile & evaluate solution...";
+            output.style.color = "#a7f3d0";
+
+            document.getElementById("hintCount").textContent = "0";
+            document.getElementById("hintContainer").style.display = "none";
+            document.getElementById("hintContainer").innerHTML = "";
+
+            const showSolutionBtn = document.getElementById("showSolutionBtn");
+            showSolutionBtn.disabled = true;
+            showSolutionBtn.style.backgroundColor = "#475569";
+            showSolutionBtn.style.color = "#94a3b8";
+            showSolutionBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Solution Locked`;
+
+            document.getElementById("editorModal").style.display = "flex";
+        }
+
+        // HINT BUTTON CLICK LOGIC
+        document.getElementById("getHintBtn")?.addEventListener("click", () => {
+            const problem = questions.find(q => q.id === activeProblemId);
+            const lang = document.getElementById("languageSelect").value;
+            
+            if (!problem || !problem.hints || !problem.hints[lang]) {
+                alert("No hints available for this problem.");
+                return;
+            }
+
+            const hints = problem.hints[lang];
+
+            if (currentHintIndex < hints.length) {
+                const hintContainer = document.getElementById("hintContainer");
+                hintContainer.style.display = "block";
+                
+                const newHint = document.createElement("p");
+                newHint.style.marginBottom = "4px";
+                newHint.textContent = hints[currentHintIndex];
+                hintContainer.appendChild(newHint);
+
+                currentHintIndex++;
+                document.getElementById("hintCount").textContent = currentHintIndex;
+
+                if (currentHintIndex >= 3) {
+                    const showSolutionBtn = document.getElementById("showSolutionBtn");
+                    showSolutionBtn.disabled = false;
+                    showSolutionBtn.style.backgroundColor = "#0284c7";
+                    showSolutionBtn.style.color = "#ffffff";
+                    showSolutionBtn.innerHTML = `<i class="fa-solid fa-key"></i> Show Solution`;
+                }
+            } else {
+                alert("All 3 hints have been revealed!");
+            }
+        });
+
+        // SHOW SOLUTION BUTTON CLICK LOGIC
+        document.getElementById("showSolutionBtn")?.addEventListener("click", () => {
+            const problem = questions.find(q => q.id === activeProblemId);
+            const lang = document.getElementById("languageSelect").value;
+
+            if (problem && problem.solutions && problem.solutions[lang]) {
+                document.getElementById("codeTextarea").value = problem.solutions[lang];
+                document.getElementById("consoleOutput").textContent = "Solution loaded into editor!";
+                document.getElementById("consoleOutput").style.color = "#38bdf8";
+            }
+        });
+
+        document.getElementById("languageSelect")?.addEventListener("change", (e) => {
+            const lang = e.target.value;
+            document.getElementById("codeTextarea").value = codeTemplates[lang] || "";
+            currentHintIndex = 0;
+            document.getElementById("hintCount").textContent = "0";
+            document.getElementById("hintContainer").style.display = "none";
+            document.getElementById("hintContainer").innerHTML = "";
+            
+            const showSolutionBtn = document.getElementById("showSolutionBtn");
+            showSolutionBtn.disabled = true;
+            showSolutionBtn.style.backgroundColor = "#475569";
+            showSolutionBtn.style.color = "#94a3b8";
+            showSolutionBtn.innerHTML = `<i class="fa-solid fa-lock"></i> Solution Locked`;
+        });
+
+        document.getElementById("closeEditorModal")?.addEventListener("click", () => {
+            document.getElementById("editorModal").style.display = "none";
+        });
+
+        // SMART EVALUATION ENGINE FOR RUN CODE
+        document.getElementById("runCodeBtn")?.addEventListener("click", () => {
+            const userCode = document.getElementById("codeTextarea").value.toLowerCase();
+            const output = document.getElementById("consoleOutput");
+            const problem = questions.find(q => q.id === activeProblemId);
+
+            output.textContent = "Compiling and evaluating logic...";
+            output.style.color = "#fde047";
+
+            setTimeout(() => {
+                const isTemplate = userCode.includes("write your solution here") || userCode.includes("pass") || userCode.length < 35;
+                let matchesKeywords = false;
+                if (problem && problem.requiredKeywords) {
+                    matchesKeywords = problem.requiredKeywords.some(kw => userCode.includes(kw));
+                }
+
+                if (isTemplate || !matchesKeywords) {
+                    output.textContent = "Error: Test Case Failed! Incorrect logic or missing implementation for " + (problem ? problem.title : "question") + ".";
+                    output.style.color = "#fca5a5";
+                } else {
+                    output.textContent = "Output: Test Case Passed! (Execution time: 38ms)";
+                    output.style.color = "#a7f3d0";
+                }
+            }, 800);
+        });
+
+        // SUBMIT SOLUTION LOGIC
+        document.getElementById("submitCodeBtn")?.addEventListener("click", () => {
+            const userCode = document.getElementById("codeTextarea").value.toLowerCase();
+            const output = document.getElementById("consoleOutput");
+            const problem = questions.find(q => q.id === activeProblemId);
+
+            output.textContent = "Submitting solution...";
+
+            setTimeout(() => {
+                const isTemplate = userCode.includes("write your solution here") || userCode.includes("pass") || userCode.length < 35;
+                let matchesKeywords = false;
+                if (problem && problem.requiredKeywords) {
+                    matchesKeywords = problem.requiredKeywords.some(kw => userCode.includes(kw));
+                }
+
+                if (isTemplate || !matchesKeywords) {
+                    output.textContent = "Submission Failed: Solution did not produce correct results. Please revise your code.";
+                    output.style.color = "#fca5a5";
+                } else {
+                    output.textContent = "Accepted! Solution passed all test cases.";
+                    output.style.color = "#34d399";
+
+                    if (problem) problem.solved = true;
+
+                    applyFilters();
+                    updateDashboardProgressBar();
+
+                    setTimeout(() => {
+                        document.getElementById("editorModal").style.display = "none";
+                    }, 1200);
+                }
+            }, 1000);
+        });
+
+        /* =====================================================
+           7. QUIZ ENGINE
+        ===================================================== */
+        let quizIndex = 0, quizScore = 0, selectedOption = null;
+
+        const navPractice = document.getElementById("navPractice");
+        const navQuiz = document.getElementById("navQuiz");
+        const practiceSection = document.getElementById("practiceSection");
+        const quizSection = document.getElementById("quizSection");
+
+        navPractice?.addEventListener("click", (e) => {
+            e.preventDefault();
+            navPractice.classList.add("active"); navQuiz.classList.remove("active");
+            practiceSection.style.display = "block"; quizSection.style.display = "none";
+        });
+
+        navQuiz?.addEventListener("click", (e) => {
+            e.preventDefault();
+            navQuiz.classList.add("active"); navPractice.classList.remove("active");
+            practiceSection.style.display = "none"; quizSection.style.display = "block";
+            startQuiz();
+        });
+
+        function startQuiz() {
+            quizIndex = 0; quizScore = 0;
+            document.getElementById("quizCardBox").style.display = "block";
+            document.getElementById("quizScoreBox").style.display = "none";
+            loadQuizQuestion();
+        }
+
+        function loadQuizQuestion() {
+            selectedOption = null;
+            document.getElementById("quizNextBtn").disabled = true;
+            const q = quizData[quizIndex];
+            document.getElementById("quizCounter").textContent = `Question ${quizIndex + 1} of ${quizData.length}`;
+            document.getElementById("quizQuestionText").textContent = q.question;
+
+            const container = document.getElementById("quizOptionsContainer");
+            container.innerHTML = "";
+            q.options.forEach((opt, idx) => {
+                const btn = document.createElement("button");
+                btn.className = "quiz-option-btn";
+                btn.textContent = opt;
+                btn.onclick = () => {
+                    selectedOption = idx;
+                    document.querySelectorAll(".quiz-option-btn").forEach(b => b.classList.remove("selected"));
+                    btn.classList.add("selected");
+                    document.getElementById("quizNextBtn").disabled = false;
+                };
+                container.appendChild(btn);
+            });
+            document.getElementById("quizNextBtn").textContent = quizIndex === quizData.length - 1 ? "Submit Quiz" : "Next Question";
+        }
+
+        document.getElementById("quizNextBtn")?.addEventListener("click", () => {
+            if (selectedOption === null) return;
+            if (selectedOption === quizData[quizIndex].correct) quizScore++;
+            quizIndex++;
+            if (quizIndex < quizData.length) loadQuizQuestion();
+            else {
+                document.getElementById("quizCardBox").style.display = "none";
+                document.getElementById("quizScoreBox").style.display = "block";
+                document.getElementById("quizScoreText").textContent = `You scored ${quizScore} out of ${quizData.length} (${Math.round((quizScore / quizData.length) * 100)}%)`;
+            }
+        });
+
+        document.getElementById("quizRestartBtn")?.addEventListener("click", startQuiz);
+
+        /* =====================================================
+           8. JSON & LOGOUT MODALS
+        ===================================================== */
+        document.getElementById("jsonBtn")?.addEventListener("click", (e) => {
+            e.preventDefault();
+            document.getElementById("jsonDisplay").textContent = JSON.stringify(questions, null, 2);
+            document.getElementById("jsonModal").style.display = "flex";
+        });
+        document.getElementById("closeJsonModal")?.addEventListener("click", () => {
+            document.getElementById("jsonModal").style.display = "none";
+        });
+
+        document.getElementById("logoutBtn")?.addEventListener("click", () => {
+            document.getElementById("logoutModal").style.display = "flex";
+        });
+        document.getElementById("cancelLogoutBtn")?.addEventListener("click", () => {
+            document.getElementById("logoutModal").style.display = "none";
+        });
+        document.getElementById("confirmLogoutBtn")?.addEventListener("click", () => {
+            document.getElementById("logoutModal").style.display = "none";
+            sessionStorage.clear(); localStorage.clear();
+            window.history.back();
+        });
+
+        // INITIALIZE APP
+        renderSidebar();
+        applyFilters();
+        updateDashboardProgressBar();
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,290 @@
+/* =====================================
+   GOOGLE FONT
+===================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* =====================================
+   RESET
+===================================== */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
+}
+
+body{
+    background:#0f172a;
+    color:white;
+    padding:40px;
+}
+
+/* =====================================
+   CONTAINER
+===================================== */
+
+.container{
+    max-width:1200px;
+    margin:auto;
+}
+
+/* =====================================
+   HEADER
+===================================== */
+
+header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:35px;
+}
+
+header h1{
+    color:#3b82f6;
+    font-size:30px;
+}
+
+header button{
+    padding:12px 20px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    background:#2563eb;
+    color:white;
+    font-size:15px;
+    transition:.3s;
+}
+
+header button:hover{
+    background:#1d4ed8;
+}
+
+/* =====================================
+   QUESTION BOX
+===================================== */
+
+.question-box{
+    background:#1e293b;
+    padding:35px;
+    border-radius:20px;
+    box-shadow:0 20px 40px rgba(0,0,0,.35);
+}
+
+/* =====================================
+   TITLE
+===================================== */
+
+.title{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    flex-wrap:wrap;
+    margin-bottom:30px;
+}
+
+.title h2{
+    font-size:36px;
+}
+
+/* =====================================
+   BADGES
+===================================== */
+
+.badges{
+    display:flex;
+    gap:12px;
+    flex-wrap:wrap;
+}
+
+.company,
+.category,
+.easy,
+.medium,
+.hard{
+
+    padding:8px 16px;
+
+    border-radius:25px;
+
+    font-size:14px;
+
+    font-weight:600;
+
+}
+
+.company{
+    background:#2563eb;
+}
+
+.category{
+    background:#334155;
+}
+
+.easy{
+    background:#16a34a;
+}
+
+.medium{
+    background:#f59e0b;
+    color:black;
+}
+
+.hard{
+    background:#dc2626;
+}
+
+/* =====================================
+   SECTIONS
+===================================== */
+
+.section{
+    margin-top:35px;
+}
+
+.section h3{
+    margin-bottom:15px;
+    color:#60a5fa;
+}
+
+.section p{
+    color:#cbd5e1;
+    line-height:1.8;
+}
+
+.section ul{
+    margin-left:25px;
+    color:#cbd5e1;
+}
+
+.section li{
+    margin-bottom:10px;
+}
+
+/* =====================================
+   CODE BLOCK
+===================================== */
+
+pre{
+
+    background:#0f172a;
+
+    padding:20px;
+
+    border-radius:12px;
+
+    overflow-x:auto;
+
+    margin-top:15px;
+
+    color:#22c55e;
+
+    font-size:14px;
+
+    line-height:1.6;
+
+}
+
+/* =====================================
+   TABLE
+===================================== */
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+    margin-top:20px;
+
+}
+
+table th{
+
+    background:#2563eb;
+
+    padding:15px;
+
+}
+
+table td{
+
+    padding:15px;
+
+    background:#1e293b;
+
+    border-bottom:1px solid #334155;
+
+}
+
+table tr:hover td{
+
+    background:#233146;
+
+}
+
+/* =====================================
+   DOWNLOAD BUTTON
+===================================== */
+
+.download{
+
+    width:100%;
+
+    margin-top:40px;
+
+    padding:15px;
+
+    border:none;
+
+    border-radius:12px;
+
+    background:linear-gradient(90deg,#3b82f6,#2563eb);
+
+    color:white;
+
+    cursor:pointer;
+
+    font-size:16px;
+
+    font-weight:600;
+
+    transition:.3s;
+
+}
+
+.download:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 10px 25px rgba(59,130,246,.35);
+
+}
+
+/* =====================================
+   RESPONSIVE
+===================================== */
+
+@media(max-width:768px){
+
+    body{
+        padding:20px;
+    }
+
+    .title{
+        flex-direction:column;
+        align-items:flex-start;
+        gap:20px;
+    }
+
+    .title h2{
+        font-size:28px;
+    }
+
+    header{
+        flex-direction:column;
+        gap:20px;
+    }
+
+}
